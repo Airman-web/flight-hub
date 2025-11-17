@@ -1,3 +1,13 @@
+# Environment variables & API Keys
+.env
+*.env
+config.py
+
+# Cache files
+cache/
+*.json
+api_cache.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
