@@ -1,0 +1,322 @@
+/* Map Page Styling */
+
+.map-container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 100px);
+    display: flex;
+}
+
+/* Map */
+#map {
+    flex: 1;
+    z-index: 1;
+    background: #f0f0f0;
+}
+
+.leaflet-container {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+}
+
+/* Aircraft Markers */
+.aircraft-marker {
+    background: none !important;
+    border: none !important;
+    filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+    animation: planeFloat 3s ease-in-out infinite;
+}
+
+@keyframes planeFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* Aircraft Popup */
+.aircraft-popup {
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.aircraft-popup strong {
+    color: #667eea;
+    font-size: 14px;
+}
+
+.leaflet-popup-content-wrapper {
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Side Panel */
+.map-panel {
+    width: 320px;
+    background: white;
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.map-panel.collapsed {
+    width: 0;
+    box-shadow: none;
+}
+
+.panel-header {
+    padding: 15px;
+    border-bottom: 2px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.panel-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+}
+
+.btn-small {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.5em;
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+
+.btn-small:hover {
+    transform: scale(1.2);
+}
+
+.panel-content {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+/* Stat Items */
+.stat-item {
+    margin-bottom: 20px;
+    padding: 12px;
+    background: #f8f9ff;
+    border-radius: 8px;
+    border-left: 3px solid #667eea;
+}
+
+.stat-item label {
+    display: block;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+}
+
+.stat-value {
+    font-size: 1.8em;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.stat-item input,
+.stat-item select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9em;
+}
+
+.stat-item input:focus,
+.stat-item select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+/* Checkboxes */
+.stat-item label[type] {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: normal;
+    margin-bottom: 8px;
+}
+
+.stat-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+/* Selected Aircraft Info */
+.selected-aircraft {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.selected-aircraft h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.selected-aircraft p {
+    margin: 5px 0;
+    font-size: 0.85em;
+    line-height: 1.5;
+}
+
+.selected-aircraft strong {
+    color: #fff;
+}
+
+/* Buttons */
+.btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+}
+
+.btn-warning {
+    background: #FF9800;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: #F57C00;
+}
+
+.btn-block {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Loading */
+.loading-map {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    z-index: 200;
+}
+
+.spinner {
+    border: 4px solid #f0f0f0;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-map p {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 300;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: white;
+    margin: auto;
+    padding: 30px;
+    border-radius: 15px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+    color: #999;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover {
+    color: #333;
+}
+
+.modal h2 {
+    color: #667eea;
+    margin-top: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .map-panel {
+        position: absolute;
+        width: 280px;
+        height: 100%;
+        right: 0;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .map-panel.collapsed {
+        transform: translateX(100%);
+    }
+
+    #map {
+        width: 100%;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 20px;
+    }
+}

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airlines - FlightHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-plane-departure"></i>
+                <a href="{{ url_for('dashboard') }}" style="color: inherit; text-decoration: none;">FlightHub</a>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
+                <a href="{{ url_for('auth.profile') }}" class="user-link">
+                    <i class="fas fa-user-circle"></i> {{ user.username }}
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1><i class="fas fa-plane"></i> Airlines Database</h1>
+            <p>Explore 13,000+ airlines worldwide with detailed information</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+        <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
+        <!-- Search Section -->
+        <section class="search-section">
+            <h2>Browse Airlines</h2>
+            <button class="btn btn-primary btn-search" onclick="loadAirlines()">
+                <i class="fas fa-download"></i> Load Airlines
+            </button>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="controls-section">
+            <div class="controls">
+                <div class="control-group">
+                    <i class="fas fa-search" style="position: absolute; left: 25px; top: 50%; transform: translateY(-50%); color: #999;"></i>
+                    <input type="text" id="airline-search" placeholder="Search by name, IATA code, or country..." oninput="searchAirlines()" style="padding-left: 40px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <h2>Airlines</h2>
+            <div id="airlines-results" class="results-container">
+                <div class="empty-state">
+                    <p><i class="fas fa-plane"></i> Click "Load Airlines" to view the airlines database</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading airline data...</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 FlightHub. All rights reserved.</p>
+            <p>
+                <i class="fas fa-plane"></i> Airline data powered by <a href="https://aviationstack.com" target="_blank">AviationStack</a> |
+                <i class="fas fa-envelope"></i> Contact: <a href="mailto:e.atigbi@alustudent.com">e.atigbi@alustudent.com</a>
+            </p>
+        </div>
+    </footer>
+
+    <style>
+        /* ALU Colors */
+        body {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+        }
+
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #FF6B35;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+        }
+
+        .header h1 {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .search-section {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            margin-bottom: 40px;
+            animation: slideInUp 0.6s ease-out;
+            text-align: center;
+        }
+
+        .search-section h2 {
+            color: #FF6B35;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            color: white;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+
+        .controls-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .control-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .control-group input:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .results-section {
+            margin-top: 40px;
+        }
+
+        .results-section h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+        }
+
+        .results-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        .airline-card {
+            padding: 25px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+            animation: slideInRight 0.5s ease-out backwards;
+        }
+
+        .airline-card:nth-child(1) { animation-delay: 0.1s; }
+        .airline-card:nth-child(2) { animation-delay: 0.2s; }
+        .airline-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .airline-card:last-child {
+            border-bottom: none;
+        }
+
+        .airline-card:hover {
+            background: linear-gradient(90deg, #fff5f2 0%, white 100%);
+            transform: translateX(5px);
+        }
+
+        .airline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .airline-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #FF6B35;
+        }
+
+        .airline-code {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .airline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            font-size: 0.9em;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            background: #fff5f2;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            color: #FF6B35;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+            border-left: 4px solid #c62828;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 0px 0px;
+            position: relative;
+        }
+
+        .footer p {
+            margin: 0px 0;
+            color: white;
+        }
+
+        .footer a {
+            color: #FF6B35;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #5B2C6F;
+            text-decoration: underline;
+        }
+
+        .footer i {
+            margin-right: 5px;
+            color: #FF6B35;
+        }
+    </style>
+
+    <script>
+        let airlinesData = [];
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'flex' : 'none';
+        }
+
+        async function loadAirlines() {
+            showLoading(true);
+
+            try {
+                const response = await fetch('/api/airlines');
+                const data = await response.json();
+
+                if (data.error) {
+                    showError('airlines-results', data.error.message || 'Failed to fetch airlines');
+                    airlinesData = [];
+                } else if (data.data && data.data.length > 0) {
+                    airlinesData = data.data;
+                    displayAirlines(airlinesData);
+                } else {
+                    showError('airlines-results', 'No airline data available');
+                    airlinesData = [];
+                }
+            } catch (error) {
+                showError('airlines-results', 'Network error: ' + error.message);
+                airlinesData = [];
+            }
+
+            showLoading(false);
+        }
+
+        function displayAirlines(airlines) {
+            const container = document.getElementById('airlines-results');
+
+            if (!airlines || airlines.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>No airlines to display</p></div>';
+                return;
+            }
+
+            let html = '';
+
+            airlines.forEach(airline => {
+                html += `
+                    <div class="airline-card">
+                        <div class="airline-header">
+                            <span class="airline-name"><i class="fas fa-plane"></i> ${airline.airline_name || 'Unknown'}</span>
+                            <span class="airline-code">${airline.iata_code || 'N/A'}</span>
+                        </div>
+
+                        <div class="airline-grid">
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-code"></i> ICAO Code</span>
+                                <span class="info-value">${airline.icao_code || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-globe"></i> Country</span>
+                                <span class="info-value">${airline.country_name || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-plane-departure"></i> Fleet Size</span>
+                                <span class="info-value">${airline.fleet_size || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-calendar-alt"></i> Founded</span>
+                                <span class="info-value">${airline.date_founded || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-broadcast-tower"></i> Callsign</span>
+                                <span class="info-value">${airline.callsign || 'N/A'}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label"><i class="fas fa-info-circle"></i> Status</span>
+                                <span class="info-value">${airline.status || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function searchAirlines() {
+            const searchTerm = document.getElementById('airline-search').value.toLowerCase();
+
+            if (!searchTerm) {
+                displayAirlines(airlinesData);
+                return;
+            }
+
+            const filtered = airlinesData.filter(airline => {
+                const name = (airline.airline_name || '').toLowerCase();
+                const iata = (airline.iata_code || '').toLowerCase();
+                const country = (airline.country_name || '').toLowerCase();
+
+                return name.includes(searchTerm) || 
+                       iata.includes(searchTerm) ||
+                       country.includes(searchTerm);
+            });
+
+            displayAirlines(filtered);
+        }
+
+        function showError(container, message) {
+            const errorHTML = `
+                <div class="error-message">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Error:</strong> ${message}
+                </div>
+            `;
+            document.getElementById(container).innerHTML = errorHTML;
+        }
+    </script>
+</body>
+</html>

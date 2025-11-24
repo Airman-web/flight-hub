@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FlightHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ALU Color Override */
+        :root {
+            --primary-color: #FF6B35;
+            --secondary-color: #5B2C6F;
+        }
+
+        body {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+        }
+
+        /* Navbar */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .nav-links a:hover {
+            color: #FF6B35;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+        }
+
+        .user-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Header */
+        .header h1 {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Sections */
+        .features-section h2,
+        .stats-section h2,
+        .quick-actions h2,
+        .info-section h2 {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+            border-color: #FF6B35;
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            color: #FF6B35;
+        }
+
+        .feature-arrow {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: #FF6B35;
+            font-size: 1.5em;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover .feature-arrow {
+            opacity: 1;
+        }
+
+        /* Stats */
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+        }
+
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        /* Action Buttons */
+        .action-btn {
+            background: white;
+            border: 2px solid #FF6B35;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .action-icon {
+            font-size: 1.5em;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 2px solid #ddd;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #FF6B35;
+            color: white;
+            border-color: #FF6B35;
+        }
+
+        .footer a {
+            color: #FF6B35;
+        }
+
+        .footer a:hover {
+            color: #5B2C6F;
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0px;
+            position: relative;
+            min-height: 0dvh;
+            grid-template-rows: auto 1fr auto;
+        }
+
+        .footer p {
+            margin: 10px 0;
+            color: white;
+        }
+
+        .footer a {
+            color: #FF6B35;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #5B2C6F;
+            text-decoration: underline;
+        }
+
+        .footer i {
+            margin-right: 5px;
+            color: #FF6B35;
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-plane-departure"></i>
+                <span>FlightHub</span>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+                <a href="{{ url_for('auth.profile') }}" class="user-link">
+                    <i class="fas fa-user-circle"></i> {{ user.username }}
+                </a>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>Welcome, {{ user.username }}!</h1>
+                <p>Choose what you'd like to explore</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Feature Grid -->
+        <section id="features" class="features-section">
+            <h2><i class="fas fa-star"></i> Core Features</h2>
+            
+            <div class="feature-grid">
+                <!-- Flights Feature -->
+                <a href="{{ url_for('flights_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                    <div class="feature-icon">
+                        <i class="fas fa-plane-departure"></i>
+                    </div>
+                    <h3>Real-Time Flights</h3>
+                    <p>Track flights with weather data and detailed information</p>
+                    <span class="feature-arrow">→</span>
+                </a>
+
+                <!-- Live Aircraft Feature -->
+                <a href="{{ url_for('aircraft_map') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>Live Aircraft Map</h3>
+                    <p>See aircraft positions worldwide in real-time</p>
+                    <span class="feature-arrow">→</span>
+                </a>
+
+                <!-- Weather Feature -->
+                <a href="{{ url_for('weather_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <h3>Airport Weather</h3>
+                    <p>Check weather at any airport globally</p>
+                    <span class="feature-arrow">→</span>
+                </a>
+
+                <!-- Airports Feature -->
+                <a href="{{ url_for('airports_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                    <div class="feature-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Airport Directory</h3>
+                    <p>Browse 6,000+ airports worldwide</p>
+                    <span class="feature-arrow">→</span>
+                </a>
+
+                <!-- Airlines Feature -->
+                <a href="{{ url_for('airlines_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                    <div class="feature-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h3>Airlines Database</h3>
+                    <p>Explore 13,000+ airlines with detailed info</p>
+                    <span class="feature-arrow">→</span>
+                </a>
+
+            <!-- History Feature -->
+            <a href="{{ url_for('get_search_history') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                <div class="feature-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>Search History</h3>
+                <p>Your recent searches and saved data</p>
+                <span class="feature-arrow">→</span>
+            </a>
+
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <h2><i class="fas fa-chart-line"></i> Platform Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="aircraft-count">0</div>
+                    <div class="stat-label">Active Aircraft</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6,000+</div>
+                    <div class="stat-label">Airports</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">13,000+</div>
+                    <div class="stat-label">Airlines</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="cache-items">0</div>
+                    <div class="stat-label">Cached Items</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+            <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+            <div class="actions-grid">
+                <button class="action-btn" onclick="window.location.href='{{ url_for('flights_page') }}'">
+                    <span class="action-icon"><i class="fas fa-search"></i></span>
+                    <span>Search Flights</span>
+                </button>
+                <button class="action-btn" onclick="window.location.href='{{ url_for('weather_page') }}'">
+                    <span class="action-icon"><i class="fas fa-temperature-high"></i></span>
+                    <span>Check Weather</span>
+                </button>
+                <button class="action-btn" onclick="window.location.href='{{ url_for('aircraft_map') }}'">
+                    <span class="action-icon"><i class="fas fa-globe"></i></span>
+                    <span>View Live Map</span>
+                </button>
+                <button class="action-btn" onclick="window.location.href='{{ url_for('airlines_page') }}'">
+                    <span class="action-icon"><i class="fas fa-list"></i></span>
+                    <span>Browse Airlines</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Cache Info -->
+        <section class="info-section">
+            <h2><i class="fas fa-database"></i> Cache & Performance</h2>
+            <div class="info-card">
+                <div id="cache-info">Loading cache information...</div>
+                <button class="btn btn-secondary" onclick="clearCache()" style="margin-top: 15px;">
+                    <i class="fas fa-trash-alt"></i> Clear Cache
+                </button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+   <footer class="footer">
+    <div class="container">
+        <p><i class="fas fa-plane"></i> FlightHub - Aviation Intelligence Dashboard</p>
+        <p>
+            Powered by 
+            <a href="https://aviationstack.com" target="_blank">AviationStack</a>, 
+            <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>, 
+            & <a href="https://opensky-network.org" target="_blank">OpenSky Network</a>
+        </p>
+        <p>&copy; 2025 FlightHub. All rights reserved.</p>
+    </div>
+</footer>
+
+
+    <script>
+        // Load cache info
+        async function loadCacheInfo() {
+            try {
+                const response = await fetch('/api/cache/info');
+                const data = await response.json();
+                
+                document.getElementById('cache-info').innerHTML = `
+                    <p><i class="fas fa-chart-bar"></i> <strong>Cached Items:</strong> ${data.total_cached_items}</p>
+                    <p><i class="fas fa-sync-alt"></i> <strong>API Calls Made:</strong> ${data.api_calls_made}</p>
+                    <p><i class="fas fa-bolt"></i> <strong>API Savings:</strong> ~${(90 * data.total_cached_items).toFixed(0)}% reduction in requests</p>
+                `;
+                
+                document.getElementById('cache-items').textContent = data.total_cached_items;
+            } catch (error) {
+                console.error('Failed to load cache info:', error);
+            }
+        }
+
+        // Clear cache
+        async function clearCache() {
+            if (confirm('Are you sure you want to clear the cache?')) {
+                try {
+                    const response = await fetch('/api/cache/clear', { method: 'POST' });
+                    const data = await response.json();
+                    alert('✅ Cache cleared successfully!');
+                    loadCacheInfo();
+                } catch (error) {
+                    alert('❌ Failed to clear cache');
+                }
+            }
+        }
+
+        // Load cache info on page load
+        document.addEventListener('DOMContentLoaded', loadCacheInfo);
+    </script>
+</body>
+</html>

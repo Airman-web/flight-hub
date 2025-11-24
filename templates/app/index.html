@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Aircraft Map - FlightHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1>FlightHub - Live Aircraft Tracking</h1>
+                <div class="header-controls">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">← Back to Dashboard</a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-logout">Logout</a>
+                    <!-- In your index.html header -->
+<div class="logo-container">
+    <img src="{{ url_for('static', filename='assets/logo.gif') }}" 
+         alt="FlightHub Logo" 
+         style="width: 70px; height: 70px; object-fit: contain;">
+</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="map-container">
+        <!-- Map -->
+        <div id="map" class="map"></div>
+
+        <!-- Side Panel -->
+        <div class="map-panel">
+            <div class="panel-header">
+                <h3>🛫 Aircraft Statistics</h3>
+                <button class="btn btn-small" onclick="togglePanel()">×</button>
+            </div>
+
+            <div class="panel-content">
+                <div class="stat-item">
+                    <label>Active Aircraft:</label>
+                    <span id="aircraft-count" class="stat-value">0</span>
+                </div>
+
+                <div class="stat-item">
+                    <label>Update Frequency:</label>
+                    <select id="update-frequency" onchange="changeUpdateFrequency()">
+                        <option value="5000">Every 5 seconds</option>
+                        <option value="10000" selected>Every 10 seconds</option>
+                        <option value="30000">Every 30 seconds</option>
+                        <option value="60000">Every 60 seconds</option>
+                    </select>
+                </div>
+
+                <div class="stat-item">
+                    <label>Filter by Altitude (ft):</label>
+                    <input type="number" id="altitude-filter" placeholder="Min altitude" value="0">
+                </div>
+
+                <div class="stat-item">
+                    <label>Show Info:</label>
+                    <label><input type="checkbox" id="show-callsign" checked> Flight Callsign</label>
+                    <label><input type="checkbox" id="show-altitude" checked> Altitude</label>
+                    <label><input type="checkbox" id="show-speed" checked> Speed</label>
+                </div>
+
+                <button class="btn btn-primary btn-block" onclick="startTracking()">Start Tracking</button>
+                <button class="btn btn-secondary btn-block" onclick="stopTracking()">Stop Tracking</button>
+                <button class="btn btn-warning btn-block" onclick="centerMap()">Center Map</button>
+
+                <div id="selected-aircraft" class="selected-aircraft" style="display:none;">
+                    <h4>Selected Aircraft</h4>
+                    <div id="aircraft-details"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading-map" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading aircraft data...</p>
+        </div>
+    </div>
+
+    <!-- Aircraft List Modal -->
+    <div id="aircraft-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Aircraft Details</h2>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Data from <a href="https://opensky-network.org/" target="_blank">OpenSky Network</a> | Real-time aircraft positions</p>
+    </footer>
+
+    <!-- Leaflet Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    <script>
+        // Map variables
+        let map;
+        let markers = {};
+        let aircraftData = [];
+        let isTracking = false;
+        let updateInterval;
+        let updateFrequency = 10000;
+
+        // Initialize map on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            initMap();
+            loadAircraftData();
+        });
+
+        function initMap() {
+            // Create map centered on world
+            map = L.map('map').setView([20, 0], 2);
+            
+            // Add tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            console.log('✓ Map initialized');
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'flex' : 'none';
+        }
+
+        async function loadAircraftData() {
+            showLoading(true);
+
+            try {
+                const response = await fetch('/api/aircraft/live');
+                const data = await response.json();
+
+                if (data.error) {
+                    console.error('Error fetching aircraft:', data.error);
+                    alert('Failed to fetch aircraft data');
+                    showLoading(false);
+                    return;
+                }
+
+                // data.states is array of arrays with aircraft info
+                // [icao24, callsign, origin_country, time_position, last_contact, longitude, latitude, baro_altitude, on_ground, velocity, true_track, vertical_rate, sensors, geo_altitude, squawk, spi, position_source, category]
+                
+                aircraftData = data.states || [];
+                updateAircraftMarkers();
+                
+                document.getElementById('aircraft-count').textContent = aircraftData.length;
+                console.log(`✓ Loaded ${aircraftData.length} aircraft`);
+
+                showLoading(false);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Network error: ' + error.message);
+                showLoading(false);
+            }
+        }
+
+        function updateAircraftMarkers() {
+            const altitudeFilter = parseInt(document.getElementById('altitude-filter').value) || 0;
+
+            // Clear old markers
+            Object.keys(markers).forEach(key => {
+                map.removeLayer(markers[key]);
+            });
+            markers = {};
+
+            // Add new markers
+            aircraftData.forEach(aircraft => {
+                const [icao24, callsign, country, time_pos, last_contact, lon, lat, baro_alt, on_ground, velocity, true_track, vert_rate, sensors, geo_alt, squawk, spi, pos_source, category] = aircraft;
+
+                // Skip if no coordinates
+                if (!lon || !lat) return;
+
+                // Skip if altitude filter doesn't match
+                if (baro_alt && baro_alt < altitudeFilter) return;
+
+                // Create marker
+                const markerKey = icao24;
+                
+                // Determine marker color based on altitude
+                let color = '#00AA00'; // Green
+                if (baro_alt && baro_alt > 30000) color = '#FF0000'; // Red (high altitude)
+                if (baro_alt && baro_alt < 5000) color = '#FFA500'; // Orange (low altitude)
+
+                // Rotate icon based on track
+                const rotation = true_track || 0;
+
+                const customIcon = L.divIcon({
+                    html: `<div style="transform: rotate(${rotation}deg); color: ${color}; font-size: 24px;">✈️</div>`,
+                    iconSize: [32, 32],
+                    className: 'aircraft-marker'
+                });
+
+                const marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+
+                // Create popup content
+                let popupContent = `
+                    <div class="aircraft-popup">
+                        <strong>${callsign || 'N/A'}</strong><br>
+                        ICAO: ${icao24}<br>
+                        Country: ${country}<br>
+                        Altitude: ${baro_alt ? baro_alt.toFixed(0) + ' ft' : 'N/A'}<br>
+                        Speed: ${velocity ? (velocity * 1.94384).toFixed(0) + ' knots' : 'N/A'}<br>
+                        Track: ${true_track ? true_track.toFixed(0) + '°' : 'N/A'}<br>
+                        Vertical Rate: ${vert_rate ? vert_rate.toFixed(1) + ' m/s' : 'N/A'}<br>
+                        On Ground: ${on_ground ? 'Yes' : 'No'}
+                    </div>
+                `;
+
+                marker.bindPopup(popupContent);
+
+                marker.on('click', function() {
+                    showAircraftDetails(aircraft);
+                });
+
+                markers[markerKey] = marker;
+            });
+
+            console.log(`✓ Updated ${Object.keys(markers).length} markers`);
+        }
+
+        function showAircraftDetails(aircraft) {
+            const [icao24, callsign, country, time_pos, last_contact, lon, lat, baro_alt, on_ground, velocity, true_track, vert_rate, sensors, geo_alt, squawk, spi, pos_source, category] = aircraft;
+
+            document.getElementById('aircraft-details').innerHTML = `
+                <p><strong>Callsign:</strong> ${callsign || 'N/A'}</p>
+                <p><strong>ICAO24:</strong> ${icao24}</p>
+                <p><strong>Country:</strong> ${country}</p>
+                <p><strong>Position:</strong> ${lat.toFixed(4)}°, ${lon.toFixed(4)}°</p>
+                <p><strong>Altitude (Baro):</strong> ${baro_alt ? baro_alt.toFixed(0) + ' ft' : 'N/A'}</p>
+                <p><strong>Altitude (Geo):</strong> ${geo_alt ? geo_alt.toFixed(0) + ' ft' : 'N/A'}</p>
+                <p><strong>Speed:</strong> ${velocity ? (velocity * 1.94384).toFixed(0) + ' knots' : 'N/A'}</p>
+                <p><strong>Track:</strong> ${true_track ? true_track.toFixed(0) + '°' : 'N/A'}</p>
+                <p><strong>Vertical Rate:</strong> ${vert_rate ? vert_rate.toFixed(1) + ' m/s' : 'N/A'}</p>
+                <p><strong>On Ground:</strong> ${on_ground ? 'Yes ✓' : 'No'}</p>
+                <p><strong>Category:</strong> ${category || 'N/A'}</p>
+            `;
+
+            document.getElementById('selected-aircraft').style.display = 'block';
+        }
+
+        function startTracking() {
+            if (isTracking) {
+                console.log('Already tracking');
+                return;
+            }
+
+            isTracking = true;
+            console.log('✓ Starting aircraft tracking');
+            
+            updateInterval = setInterval(() => {
+                loadAircraftData();
+            }, updateFrequency);
+
+            alert('🛫 Aircraft tracking started!');
+        }
+
+        function stopTracking() {
+            if (isTracking) {
+                clearInterval(updateInterval);
+                isTracking = false;
+                console.log('✓ Stopped aircraft tracking');
+                alert('⏹ Aircraft tracking stopped');
+            }
+        }
+
+        function changeUpdateFrequency() {
+            updateFrequency = parseInt(document.getElementById('update-frequency').value);
+            
+            if (isTracking) {
+                clearInterval(updateInterval);
+                updateInterval = setInterval(() => {
+                    loadAircraftData();
+                }, updateFrequency);
+            }
+
+            console.log(`✓ Update frequency changed to ${updateFrequency}ms`);
+        }
+
+        function centerMap() {
+            map.setView([20, 0], 2);
+        }
+
+        function togglePanel() {
+            const panel = document.querySelector('.map-panel');
+            panel.classList.toggle('collapsed');
+        }
+
+        function closeModal() {
+            document.getElementById('aircraft-modal').style.display = 'none';
+        }
+
+        // Auto load data initially
+        console.log('🛫 Live Aircraft Tracker ready');
+    </script>
+</body>
+</html>

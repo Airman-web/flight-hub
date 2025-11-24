@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - FlightHub</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ALU Color Override */
+        .navbar {
+            background: white;
+        }
+
+        .nav-brand {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links a:hover {
+            color: #FF6B35;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+        }
+
+        .feature-card h3,
+        .api-card h3,
+        .use-case h3,
+        .contact-item h3 {
+            color: #FF6B35;
+        }
+
+        .tech-item {
+            border-left: 4px solid #FF6B35;
+        }
+
+        .tech-item h4 {
+            color: #FF6B35;
+        }
+
+        .tech-item li::before {
+            color: #FF6B35;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+        }
+
+        .api-link {
+            color: #FF6B35;
+        }
+
+        .api-link:hover {
+            color: #5B2C6F;
+        }
+
+        .contact-item a {
+            color: #FF6B35;
+        }
+
+        .contact-item a:hover {
+            color: #5B2C6F;
+        }
+
+        .footer a {
+            color: #FF6B35;
+        }
+
+        .footer a:hover {
+            color: #5B2C6F;
+        }
+
+        .feature-icon, .api-icon, .use-case-icon {
+            color: #FF6B35;
+        }
+
+        .smart-features {
+            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('index') }}" class="nav-brand">
+                <i class="fas fa-plane-departure"></i> FlightHub
+            </a>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Home</a>
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
+                {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('dashboard') }}"><i class="fas fa-th-large"></i> Dashboard</a>
+                    <a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>About FlightHub</h1>
+                <p class="hero-subtitle">Aviation Intelligence Platform</p>
+                <p class="hero-description">
+                    FlightHub is a comprehensive aviation intelligence platform that provides
+                    real-time flight tracking, weather data, and detailed information about
+                    airports, airlines, and aircraft worldwide.
+                </p>
+                {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-large">
+                    <i class="fas fa-rocket"></i> Get Started
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission">
+        <div class="container">
+            <h2><i class="fas fa-bullseye"></i> Our Mission</h2>
+            <p>
+                At FlightHub, our mission is to democratize access to aviation data and make
+                flight tracking accessible to everyone. Whether you're an aviation enthusiast,
+                a frequent traveler, or a professional in the industry, we provide the tools
+                and information you need.
+            </p>
+            <p>
+                We combine data from multiple reliable sources to give you the most accurate
+                and up-to-date information about flights, weather conditions, and aircraft
+                movements around the world.
+            </p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2><i class="fas fa-star"></i> Key Features</h2>
+            <p class="section-subtitle">Everything you need for aviation intelligence</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plane-departure"></i>
+                    </div>
+                    <h3>Real-Time Flight Tracking</h3>
+                    <p>Track flights in real-time with detailed information about departure,
+                       arrival, delays, and current status.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3>Live Aircraft Map</h3>
+                    <p>Visualize aircraft positions worldwide on an interactive map with
+                       real-time updates from OpenSky Network.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <h3>Airport Weather</h3>
+                    <p>Get current weather conditions for airports worldwide to plan your
+                       trips better and understand flight conditions.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Airport Directory</h3>
+                    <p>Browse detailed information about airports worldwide including location,
+                       timezone, and operational details.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <h3>Airline Database</h3>
+                    <p>Explore comprehensive airline information including fleet size, routes,
+                       and operational status.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Search History</h3>
+                    <p>Keep track of your searches and quickly access previously viewed
+                       flights and information.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2><i class="fas fa-cogs"></i> How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Sign Up</h3>
+                    <p>Create your free account in seconds using email or Google Sign-In</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Search</h3>
+                    <p>Search for flights, airports, airlines, or view live aircraft on the map</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Track</h3>
+                    <p>Get real-time updates and detailed information about your searches</p>
+                </div>
+
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>Analyze</h3>
+                    <p>Access your search history and analyze flight patterns and trends</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APIs Section -->
+    <section class="apis">
+        <div class="container">
+            <h2><i class="fas fa-plug"></i> Data Sources</h2>
+            <p class="section-subtitle">Powered by industry-leading aviation data providers</p>
+            
+            <div class="apis-grid">
+                <div class="api-card">
+                    <div class="api-icon">
+                        <i class="fas fa-plane-departure"></i>
+                    </div>
+                    <h3>AviationStack</h3>
+                    <p>Comprehensive flight data including schedules, delays, and real-time status updates.</p>
+                    <a href="https://aviationstack.com" target="_blank" class="api-link">
+                        Learn More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <h3>OpenWeatherMap</h3>
+                    <p>Accurate weather data for airports worldwide with current conditions and forecasts.</p>
+                    <a href="https://openweathermap.org" target="_blank" class="api-link">
+                        Learn More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="api-card">
+                    <div class="api-icon">
+                        <i class="fas fa-satellite"></i>
+                    </div>
+                    <h3>OpenSky Network</h3>
+                    <p>Live aircraft tracking data from a global network of sensors and receivers.</p>
+                    <a href="https://opensky-network.org" target="_blank" class="api-link">
+                        Learn More <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="technology">
+        <div class="container">
+            <h2><i class="fas fa-laptop-code"></i> Technology Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <h4><i class="fas fa-server"></i> Backend</h4>
+                    <ul>
+                        <li>Python & Flask</li>
+                        <li>SQLAlchemy ORM</li>
+                        <li>SQLite Database</li>
+                        <li>Flask-Login Authentication</li>
+                    </ul>
+                </div>
+
+                <div class="tech-item">
+                    <h4><i class="fas fa-palette"></i> Frontend</h4>
+                    <ul>
+                        <li>HTML5 & CSS3</li>
+                        <li>JavaScript (ES6+)</li>
+                        <li>Leaflet.js for Maps</li>
+                        <li>Responsive Design</li>
+                    </ul>
+                </div>
+
+                <div class="tech-item">
+                    <h4><i class="fas fa-star"></i> Features</h4>
+                    <ul>
+                        <li>Smart Caching System</li>
+                        <li>Google OAuth Integration</li>
+                        <li>Real-time Data Updates</li>
+                        <li>Search History</li>
+                    </ul>
+                </div>
+
+                <div class="tech-item">
+                    <h4><i class="fas fa-plug"></i> APIs</h4>
+                    <ul>
+                        <li>AviationStack API</li>
+                        <li>OpenWeatherMap API</li>
+                        <li>OpenSky Network API</li>
+                        <li>Google OAuth 2.0</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <h2><i class="fas fa-envelope"></i> Get In Touch</h2>
+            <p class="section-subtitle">Have questions? We'd love to hear from you!</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <h3><i class="fas fa-envelope"></i> Email</h3>
+                    <a href="mailto:info@flighthub.com">info@flighthub.com</a>
+                </div>
+
+                <div class="contact-item">
+                    <h3><i class="fas fa-headset"></i> Support</h3>
+                    <a href="mailto:support@flighthub.com">support@flighthub.com</a>
+                </div>
+
+                <div class="contact-item">
+                    <h3><i class="fas fa-comment-dots"></i> Feedback</h3>
+                    <a href="mailto:feedback@flighthub.com">feedback@flighthub.com</a>
+                </div>
+            </div>
+
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-large">
+                <i class="fas fa-rocket"></i> Start Using FlightHub
+            </a>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 FlightHub. All rights reserved.</p>
+            <p>
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a> |
+                <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a> |
+                <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

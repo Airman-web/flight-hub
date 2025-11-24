@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airport Weather - FlightHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --alu-orange: #FF6B35;
+            --alu-purple: #5B2C6F;
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --border-gray: #ddd;
+            --text-dark: #333;
+            --bg-light: #f8f9ff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5em;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-brand i {
+            color: var(--alu-orange);
+            -webkit-text-fill-color: var(--alu-orange);
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links a:hover {
+            color: var(--alu-orange);
+        }
+
+        .user-link {
+            color: var(--alu-orange);
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex: 1;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            margin-bottom: 40px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .search-section h2 {
+            color: var(--alu-orange);
+            margin-bottom: 30px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 0.9em;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-group label i {
+            color: var(--alu-orange);
+        }
+
+        .input-group input {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: var(--bg-light);
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--alu-orange);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.05em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+        }
+
+        .btn-search {
+            width: 100%;
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-top: 40px;
+        }
+
+        .results-section h2 {
+            color: var(--text-dark);
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .results-section h2 i {
+            color: var(--alu-orange);
+        }
+
+        .results-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        .empty-state i {
+            font-size: 3em;
+            color: var(--alu-orange);
+            opacity: 0.3;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        .weather-card {
+            padding: 40px;
+            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            color: white;
+            border-radius: 12px;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .weather-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .city-name {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .country {
+            font-size: 1em;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .temperature-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .temp-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .temp-box:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .temp-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .temp-value {
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .detail-box:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .detail-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .detail-value {
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+
+        .weather-description {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 1.2em;
+            text-transform: capitalize;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px;
+            border-left: 4px solid #c62828;
+            animation: slideInDown 0.4s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--alu-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: white;
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+            font-size: 0.9em;
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
+        .footer a {
+            color: var(--alu-orange);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--alu-purple);
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .nav-links a {
+                font-size: 0.9em;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .search-section {
+                padding: 25px;
+            }
+
+            .weather-card {
+                padding: 25px;
+            }
+
+            .city-name {
+                font-size: 1.8em;
+            }
+
+            .temp-value {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-brand {
+                font-size: 1.2em;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-plane-departure"></i>
+                <a href="{{ url_for('dashboard') }}" style="color: inherit; text-decoration: none;">FlightHub</a>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('dashboard') }}"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
+                <a href="{{ url_for('auth.profile') }}" class="user-link"><i class="fas fa-user-circle"></i> {{ user.username }}</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1><i class="fas fa-cloud-sun"></i> Airport Weather</h1>
+            <p>Check real-time weather conditions at any airport worldwide</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search Section -->
+        <section class="search-section">
+            <h2><i class="fas fa-search"></i> Search Weather</h2>
+            <div class="search-grid">
+                <div class="input-group">
+                    <label for="city-name">
+                        <i class="fas fa-map-marker-alt"></i> City or Airport Name
+                    </label>
+                    <input type="text" id="city-name" placeholder="e.g., New York, London, Tokyo">
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-search" onclick="searchWeather()">
+                <i class="fas fa-search"></i> Get Weather
+            </button>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <h2><i class="fas fa-cloud-sun-rain"></i> Weather Information</h2>
+            <div id="weather-results" class="results-container">
+                <div class="empty-state">
+                    <i class="fas fa-cloud-sun"></i>
+                    <p>Enter a city or airport name to check the weather</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+        <p>Loading weather data...</p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 FlightHub. All rights reserved.</p>
+            <p>
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a> |
+                <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a> |
+                <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'flex' : 'none';
+        }
+
+        async function searchWeather() {
+            const city = document.getElementById('city-name').value.trim();
+
+            if (!city) {
+                showError('weather-results', 'Please enter a city or airport name');
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const response = await fetch(`/api/weather/airport/${encodeURIComponent(city)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    showError('weather-results', data.error.message || 'Weather data not found');
+                } else if (data.main) {
+                    displayWeather(data);
+                } else {
+                    showError('weather-results', 'Unable to fetch weather data for this location');
+                }
+            } catch (error) {
+                showError('weather-results', 'Network error: ' + error.message);
+            }
+
+            showLoading(false);
+        }
+
+        function displayWeather(data) {
+            const container = document.getElementById('weather-results');
+
+            const weatherDescription = data.weather?.[0]?.description || 'Unknown';
+            const weatherIcon = getWeatherIcon(data.weather?.[0]?.main);
+            const temp = Math.round(data.main.temp);
+            const feelsLike = Math.round(data.main.feels_like);
+            const tempMin = Math.round(data.main.temp_min);
+            const tempMax = Math.round(data.main.temp_max);
+            const humidity = data.main.humidity;
+            const pressure = data.main.pressure;
+            const windSpeed = Math.round(data.wind.speed * 3.6); // Convert m/s to km/h
+            const cloudiness = data.clouds.all;
+
+            const html = `
+                <div class="weather-card">
+                    <div class="weather-header">
+                        <div class="city-name">
+                            <i class="fas fa-map-marker-alt"></i>
+                            ${data.name}
+                        </div>
+                        <div class="country">
+                            <i class="fas fa-flag"></i>
+                            ${data.sys?.country || 'International'}
+                        </div>
+                    </div>
+
+                    <div class="temperature-section">
+                        <div class="temp-box">
+                            <div class="temp-label"><i class="fas fa-thermometer-half"></i> Current Temp</div>
+                            <div class="temp-value">${temp}°C</div>
+                        </div>
+                        <div class="temp-box">
+                            <div class="temp-label"><i class="fas fa-temperature-high"></i> Feels Like</div>
+                            <div class="temp-value">${feelsLike}°C</div>
+                        </div>
+                        <div class="temp-box">
+                            <div class="temp-label"><i class="fas fa-arrows-alt-v"></i> Min / Max</div>
+                            <div class="temp-value">${tempMin}° / ${tempMax}°</div>
+                        </div>
+                    </div>
+
+                    <div class="weather-details">
+                        <div class="detail-box">
+                            <div class="detail-label"><i class="fas fa-tint"></i> Humidity</div>
+                            <div class="detail-value">${humidity}%</div>
+                        </div>
+                        <div class="detail-box">
+                            <div class="detail-label"><i class="fas fa-wind"></i> Wind Speed</div>
+                            <div class="detail-value">${windSpeed} km/h</div>
+                        </div>
+                        <div class="detail-box">
+                            <div class="detail-label"><i class="fas fa-compress-arrows-alt"></i> Pressure</div>
+                            <div class="detail-value">${pressure} hPa</div>
+                        </div>
+                        <div class="detail-box">
+                            <div class="detail-label"><i class="fas fa-cloud"></i> Cloudiness</div>
+                            <div class="detail-value">${cloudiness}%</div>
+                        </div>
+                    </div>
+
+                    <div class="weather-description">
+                        <i class="${weatherIcon}"></i>
+                        ${weatherDescription}
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function getWeatherIcon(weatherMain) {
+            const icons = {
+                'Clear': 'fas fa-sun',
+                'Clouds': 'fas fa-cloud',
+                'Rain': 'fas fa-cloud-rain',
+                'Drizzle': 'fas fa-cloud-rain',
+                'Thunderstorm': 'fas fa-bolt',
+                'Snow': 'fas fa-snowflake',
+                'Mist': 'fas fa-smog',
+                'Fog': 'fas fa-smog',
+                'Haze': 'fas fa-smog'
+            };
+            return icons[weatherMain] || 'fas fa-cloud-sun';
+        }
+
+        function showError(container, message) {
+            const errorHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>Error:</strong> ${message}
+                    </div>
+                </div>
+            `;
+            document.getElementById(container).innerHTML = errorHTML;
+        }
+
+        // Allow Enter key to search
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('city-name').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchWeather();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
