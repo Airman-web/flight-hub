@@ -54,10 +54,8 @@
             gap: 12px;
             font-size: 1.5em;
             font-weight: bold;
-            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background: var(--alu-orange);
+            color: var(--alu-orange);
         }
 
         .nav-brand i {
@@ -96,7 +94,7 @@
         }
 
         .btn-logout {
-            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            background: var(--alu-orange);
             color: white;
             padding: 8px 20px;
             border-radius: 20px;
@@ -110,7 +108,7 @@
 
         /* Header */
         .header {
-            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            background: var(--alu-orange);
             color: white;
             padding: 60px 20px;
             text-align: center;
@@ -304,7 +302,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            background: var(--alu-orange);
             color: white;
             box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
         }
@@ -323,7 +321,7 @@
         }
 
         .btn-warning {
-            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            background: #FF9800;
             color: white;
         }
 
@@ -332,7 +330,7 @@
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            background: #f44336;
             color: white;
         }
 
@@ -348,7 +346,7 @@
         }
 
         .contact-link {
-            background: linear-gradient(135deg, var(--alu-orange) 0%, var(--alu-purple) 100%);
+            background: var(--alu-orange);
             color: white;
             padding: 25px;
             border-radius: 12px;
@@ -604,9 +602,11 @@
                 }
 
                 let html = '<div class="history-items">';
-                history.slice(0, 10).forEach(item => {
+                history.slice(0, 10).forEach((item, index) => {
+                    // Escape quotes and special characters for onclick handler
+                    const safeQuery = (item.search_query || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                     html += `
-                        <div class="history-item">
+                        <div class="history-item" onclick="handleHistoryClick(${index})" style="cursor: pointer;" data-search-type="${item.search_type}" data-search-query="${safeQuery}">
                             <div>
                                 <strong><i class="fas fa-search"></i> ${item.search_type}</strong>: ${item.search_query}
                             </div>
@@ -656,6 +656,28 @@
         function deleteAccount() {
             if (confirm('⚠️ Are you sure you want to delete your account? This action cannot be undone!')) {
                 alert('Account deletion feature coming soon');
+            }
+        }
+
+        // Handle history item click
+        function handleHistoryClick(index) {
+            const historyItems = document.querySelectorAll('.history-item');
+            if (historyItems[index]) {
+                const item = historyItems[index];
+                const searchType = item.getAttribute('data-search-type');
+                const searchQuery = item.getAttribute('data-search-query');
+                
+                // Navigate to appropriate page based on search type
+                if (searchType === 'flight') {
+                    window.location.href = '/flights?query=' + encodeURIComponent(searchQuery);
+                } else if (searchType === 'airport') {
+                    window.location.href = '/airports?query=' + encodeURIComponent(searchQuery);
+                } else if (searchType === 'airline') {
+                    window.location.href = '/airlines?query=' + encodeURIComponent(searchQuery);
+                } else {
+                    // Default to dashboard
+                    window.location.href = '/dashboard';
+                }
             }
         }
 

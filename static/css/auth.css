@@ -8,7 +8,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -113,10 +113,8 @@ body {
 
 .auth-header h1 {
     font-size: 2.5em;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: #667eea;
+    color: #667eea;
     margin-bottom: 5px;
 }
 
@@ -195,7 +193,7 @@ body {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     animation: expandWidth 0.3s ease-out;
 }
 
@@ -301,7 +299,7 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: white;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
@@ -344,7 +342,7 @@ body {
     top: 50%;
     width: 35%;
     height: 2px;
-    background: linear-gradient(90deg, transparent, #ccc);
+    background: #ccc;
 }
 
 .divider::after {
@@ -354,7 +352,7 @@ body {
     top: 50%;
     width: 35%;
     height: 2px;
-    background: linear-gradient(90deg, #ccc, transparent);
+    background: #ccc;
 }
 
 /* Footer */

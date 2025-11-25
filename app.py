@@ -219,19 +219,26 @@ def get_live_aircraft():
             for state in data['states']:
                 # Only include aircraft with valid coordinates
                 if state[6] is not None and state[5] is not None:
+                    # Filter out aircraft on ground if desired (optional - comment out to show all)
+                    # if state[8]:  # on_ground
+                    #     continue
+                    
                     aircraft_list.append({
                         'icao24': state[0],
                         'callsign': (state[1] or '').strip() or 'Unknown',
                         'country': state[2],
+                        'origin_country': state[2],  # Add both for compatibility
                         'longitude': state[5],
                         'latitude': state[6],
                         'altitude': state[7] if state[7] else 0,
                         'on_ground': state[8],
                         'velocity': state[9] if state[9] else 0,
                         'heading': state[10] if state[10] else 0,
-                        'vertical_rate': state[11],
+                        'vertical_rate': state[11] if state[11] else 0,
                     })
 
+        print(f"✓ Processed {len(aircraft_list)} aircraft from OpenSky (total states: {len(data.get('states', []))})")
+        
         formatted_data = {
             'success': True,
             'time': data.get('time'),
@@ -256,6 +263,7 @@ def get_live_aircraft():
         return jsonify({'success': False, 'error': f'Unexpected error: {str(e)}'}), 500
 
 @app.route('/api/aircraft/live/box')
+@login_required
 def get_aircraft_live_box():
     """Get live aircraft data in a bounding box from OpenSky Network"""
     try:
@@ -384,6 +392,7 @@ def get_aircraft_live_box():
 
 # Alternative: Simpler version without bounding box (gets all aircraft)
 @app.route('/api/aircraft/live/all')
+@login_required
 def get_aircraft_live_all():
     """Get all live aircraft data from OpenSky Network"""
     try:
@@ -624,9 +633,13 @@ if __name__ == '__main__':
         db.create_all()
 
     if not AVIATIONSTACK_API_KEY or not OPENWEATHERMAP_API_KEY:
-        print("ERROR: Missing API keys in .env file!")
-        print("Please add AVIATIONSTACK_API_KEY and OPENWEATHERMAP_API_KEY")
-        exit(1)
+        print("⚠️  WARNING: Missing API keys in .env file!")
+        print("   Some features may not work without:")
+        print("   - AVIATIONSTACK_API_KEY (for flights, airports, airlines)")
+        print("   - OPENWEATHERMAP_API_KEY (for weather data)")
+        print("   OpenSky Network API (aircraft map) will work without keys")
+        print("   Continuing anyway for testing...")
+        print()
 
     print("=" * 60)
     print("FlightHub - Aviation Intelligence Dashboard")

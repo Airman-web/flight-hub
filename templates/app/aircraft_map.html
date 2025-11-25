@@ -30,7 +30,8 @@
             body {
                 margin: 0;
                 padding: 0;
-                background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+                background: #f5f5f5;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             }
 
             /* Navbar */
@@ -55,13 +56,14 @@
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                font-size: 1.5em;
-                font-weight: bold;
-                background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
+                font-size: 1.4em;
+                font-weight: 600;
+                color: #2c3e50;
                 text-decoration: none;
+            }
+            
+            .nav-brand i {
+                color: #3498db;
             }
 
             .nav-logo {
@@ -87,25 +89,26 @@
             }
 
             .nav-links a:hover {
-                color: #FF6B35;
+                color: #3498db;
             }
 
             .btn-logout {
-                background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+                background: #e74c3c;
                 color: white;
-                padding: 10px 20px;
-                border-radius: 8px;
+                padding: 8px 16px;
+                border-radius: 6px;
                 text-decoration: none;
-                font-weight: 600;
-                transition: all 0.3s ease;
+                font-weight: 500;
+                font-size: 0.9em;
+                transition: all 0.2s ease;
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 6px;
             }
 
             .btn-logout:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+                background: #c0392b;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
 
             .user-link {
@@ -127,13 +130,13 @@
 
             .map-panel {
                 width: 320px;
-                background: white;
-                box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+                background: #ffffff;
+                box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
                 overflow-y: auto;
                 z-index: 100;
                 display: flex;
                 flex-direction: column;
-                animation: slideInRight 0.4s ease-out;
+                border-left: 1px solid #e0e0e0;
             }
 
             @keyframes slideInRight {
@@ -149,9 +152,9 @@
 
             .panel-header {
                 padding: 20px;
-                background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+                background: #2c3e50;
                 color: white;
-                border-bottom: 2px solid #f0f0f0;
+                border-bottom: 1px solid #34495e;
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -174,9 +177,10 @@
             .stat-item {
                 margin-bottom: 20px;
                 padding: 15px;
-                background: #fff5f2;
-                border-radius: 10px;
-                border-left: 4px solid #FF6B35;
+                background: #f8f9fa;
+                border-radius: 8px;
+                border-left: 3px solid #3498db;
+                border: 1px solid #e9ecef;
             }
 
             .stat-item label {
@@ -191,26 +195,29 @@
             }
 
             .stat-value {
-                font-size: 1.6em;
-                color: #FF6B35;
-                font-weight: bold;
+                font-size: 1.8em;
+                color: #2c3e50;
+                font-weight: 600;
+                margin-top: 5px;
             }
 
             .stat-item select,
             .stat-item input {
                 width: 100%;
-                padding: 8px;
-                border: 1px solid #ddd;
-                border-radius: 5px;
+                padding: 10px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
                 font-size: 0.9em;
-                margin-top: 5px;
+                margin-top: 8px;
+                background: white;
+                transition: all 0.2s;
             }
 
             .stat-item select:focus,
             .stat-item input:focus {
                 outline: none;
-                border-color: #FF6B35;
-                box-shadow: 0 0 0 2px rgba(255, 107, 53, 0.1);
+                border-color: #3498db;
+                box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
             }
 
             .control-buttons {
@@ -235,7 +242,7 @@
             }
 
             .btn-start {
-                background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+                background: #4CAF50;
                 color: white;
             }
 
@@ -245,7 +252,7 @@
             }
 
             .btn-stop {
-                background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+                background: #f44336;
                 color: white;
             }
 
@@ -255,7 +262,7 @@
             }
 
             .btn-center {
-                background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+                background: #FF6B35;
                 color: white;
                 grid-column: 1 / -1;
             }
@@ -266,7 +273,7 @@
             }
 
             .selected-aircraft {
-                background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+                background: #FF6B35;
                 color: white;
                 padding: 15px;
                 border-radius: 10px;
@@ -325,7 +332,14 @@
             .aircraft-marker {
                 background: none !important;
                 border: none !important;
-                filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.3));
+                filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+            }
+            
+            .aircraft-icon {
+                width: 24px;
+                height: 24px;
+                display: block;
+                transform-origin: center center;
             }
 
             .leaflet-popup-content-wrapper {
@@ -398,20 +412,30 @@
 
                 <div class="panel-content">
                     <div class="stat-item">
-                        <label><i class="fas fa-plane"></i> Active Aircraft:</label>
+                        <label><i class="fas fa-plane"></i> Active Aircraft</label>
                         <div class="stat-value" id="aircraft-count">0</div>
+                        <small style="color: #6c757d; font-size: 0.85em;">Real-time tracking</small>
                     </div>
 
                     <div class="stat-item">
-                        <label><i class="fas fa-sync-alt"></i> Update Frequency:</label>
+                        <label><i class="fas fa-sync-alt"></i> Update Frequency</label>
                         <select id="update-frequency" onchange="changeUpdateFrequency()">
-                            <option value="5000">Every 5 seconds</option>
-                            <option value="10000" selected>Every 10 seconds</option>
-                            <option value="30000">Every 30 seconds</option>
+                            <option value="15000">Every 15 seconds</option>
+                            <option value="30000" selected>Every 30 seconds</option>
+                            <option value="60000">Every 60 seconds</option>
                         </select>
+                        <small style="color: #6c757d; font-size: 0.85em; margin-top: 5px; display: block;">OpenSky rate limit: 10s</small>
                     </div>
-
-                    <!-- additional controls / selected-aircraft block can go here -->
+                    
+                    <div class="stat-item" style="background: #e8f4f8; border-left-color: #3498db;">
+                        <label><i class="fas fa-info-circle"></i> Legend</label>
+                        <div style="font-size: 0.85em; margin-top: 8px; line-height: 1.8;">
+                            <div><span style="color: #e74c3c;">●</span> High Altitude (&gt;30k ft)</div>
+                            <div><span style="color: #2ecc71;">●</span> Medium Altitude</div>
+                            <div><span style="color: #f39c12;">●</span> Low Altitude (&lt;5k ft)</div>
+                            <div><span style="color: #95a5a6;">●</span> On Ground</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -424,69 +448,300 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.min.js"></script>
 
         <script>
-           let map = L.map('map').setView([0, 0], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
-    let markers = L.markerClusterGroup();
-    map.addLayer(markers);
+           // Initialize map
+           let map = L.map('map').setView([20, 0], 2);
+           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18 }).addTo(map);
+           // Use layer group to show all aircraft individually (no clustering)
+           let markers = L.layerGroup();
+           map.addLayer(markers);
 
-    // Minimum fetch interval (ms)
-    const MIN_INTERVAL = 15000; // 15s
-    let lastFetch = 0;
-    let fetchTimeout = null;
+           // Minimum fetch interval (ms) - OpenSky allows 1 request per 10 seconds for anonymous users
+           const MIN_INTERVAL = 12000; // 12s to be safe
+           let lastFetch = 0;
+           let fetchTimeout = null;
+           let updateInterval = null;
+           let isFetching = false; // Prevent concurrent requests
+           let rateLimitedUntil = 0; // Track when we can retry after rate limit
 
-    async function fetchAircraft() {
-        const now = Date.now();
-        if (now - lastFetch < MIN_INTERVAL) return; // skip if called too soon
-        lastFetch = now;
+           async function fetchAircraft() {
+               const now = Date.now();
+               
+               // Check if we're rate limited
+               if (now < rateLimitedUntil) {
+                   const waitTime = Math.ceil((rateLimitedUntil - now) / 1000);
+                   console.log(`Rate limited. Waiting ${waitTime} more seconds...`);
+                   return;
+               }
+               
+               // Check minimum interval
+               if (now - lastFetch < MIN_INTERVAL) {
+                   console.log("Skipping fetch - too soon");
+                   return;
+               }
+               
+               // Prevent concurrent requests
+               if (isFetching) {
+                   console.log("Already fetching, skipping...");
+                   return;
+               }
+               
+               isFetching = true;
+               lastFetch = now;
 
-        try {
-            const bounds = map.getBounds();
-            const url = `/api/aircraft/live/box?lamin=${bounds.getSouth()}&lomin=${bounds.getWest()}&lamax=${bounds.getNorth()}&lomax=${bounds.getEast()}`;
-            const res = await fetch(url);
+               try {
+                   // Show loading indicator
+                   const loadingEl = document.getElementById('aircraft-loading');
+                   if (loadingEl) loadingEl.style.display = 'flex';
+                   
+                   // Wait for map to be ready
+                   if (!map || !map.getBounds) {
+                       console.log("Map not ready, waiting...");
+                       isFetching = false;
+                       setTimeout(fetchAircraft, 1000);
+                       return;
+                   }
+                   
+                   const bounds = map.getBounds();
+                   
+                   // Validate bounds before making request
+                   if (!bounds || !bounds.isValid() || bounds.getSouth() === bounds.getNorth()) {
+                       // Use main endpoint which has better caching
+                       console.log("Using /api/aircraft/live (bounds not ready)");
+                       const url = `/api/aircraft/live`;
+                       const res = await fetch(url);
+                       await processAircraftResponse(res);
+                       isFetching = false;
+                       return;
+                   }
+                   
+                   // Use main endpoint instead of box to avoid rate limits
+                   // The main endpoint has caching on the backend
+                   console.log("Using /api/aircraft/live (with caching)");
+                   const url = `/api/aircraft/live`;
+                   const res = await fetch(url);
+                   await processAircraftResponse(res);
+               } catch (err) {
+                   console.error("Error fetching aircraft:", err);
+                   const loadingEl = document.getElementById('aircraft-loading');
+                   if (loadingEl) loadingEl.style.display = 'none';
+                   const countEl = document.getElementById('aircraft-count');
+                   if (countEl) countEl.innerText = 'Error';
+               } finally {
+                   isFetching = false;
+               }
+           }
 
-            if (res.status === 429) {
-                console.warn("Rate limited! Waiting before next fetch...");
-                return;
-            }
+           async function processAircraftResponse(res) {
+               try {
+                   console.log("Processing response, status:", res.status);
 
-            const data = await res.json();
-            const states = data.data?.states || data.states || [];
+                   if (res.status === 429) {
+                       // Rate limited - set backoff time (OpenSky allows 1 request per 10 seconds)
+                       rateLimitedUntil = Date.now() + 15000; // Wait 15 seconds
+                       console.warn("Rate limited! Waiting 15 seconds before next fetch...");
+                       
+                       const countEl = document.getElementById('aircraft-count');
+                       if (countEl) countEl.innerText = 'Rate Limited';
+                       
+                       const loadingEl = document.getElementById('aircraft-loading');
+                       if (loadingEl) loadingEl.style.display = 'none';
+                       
+                       // Schedule retry after backoff
+                       setTimeout(() => {
+                           rateLimitedUntil = 0;
+                           console.log("Rate limit backoff expired, can fetch again");
+                       }, 15000);
+                       
+                       return;
+                   }
 
-            document.getElementById('aircraft-count').innerText = states.length;
+                   if (!res.ok) {
+                       console.error("Response not OK:", res.status, res.statusText);
+                       const errorText = await res.text();
+                       console.error("Error response:", errorText);
+                       const countEl = document.getElementById('aircraft-count');
+                       if (countEl) countEl.innerText = 'Error';
+                       const loadingEl = document.getElementById('aircraft-loading');
+                       if (loadingEl) loadingEl.style.display = 'none';
+                       return;
+                   }
 
-            markers.clearLayers();
-            states.forEach(state => {
-                const [icao24, callsign, origin_country, , , lon, lat] = state;
-                if (!lat || !lon) return;
+                   const data = await res.json();
+                   console.log("Response data:", data);
+                   
+                   // Handle error responses
+                   if (data.error || (data.success === false)) {
+                       console.error("API Error:", data.error || data.message);
+                       const countEl = document.getElementById('aircraft-count');
+                       if (countEl) countEl.innerText = '0';
+                       const loadingEl = document.getElementById('aircraft-loading');
+                       if (loadingEl) loadingEl.style.display = 'none';
+                       return;
+                   }
 
-                const marker = L.marker([lat, lon])
-                    .bindPopup(`<strong>${callsign || icao24}</strong><br>${origin_country}`);
-                markers.addLayer(marker);
-            });
+                   // API returns aircraft array, not states
+                   const aircraft = data.aircraft || [];
+                   console.log(`📊 API Response: Found ${aircraft.length} aircraft in response`);
+                   
+                   if (aircraft.length > 0) {
+                       console.log("📋 Sample aircraft data (first 3):", JSON.stringify(aircraft.slice(0, 3), null, 2));
+                   }
 
-        } catch (err) {
-            console.error("Error fetching aircraft:", err);
-        }
-    }
+                   const countEl = document.getElementById('aircraft-count');
+                   if (countEl) countEl.innerText = aircraft.length;
 
-    // Interval update
-    let updateInterval = parseInt(document.getElementById("update-frequency").value);
-    setInterval(fetchAircraft, Math.max(updateInterval, MIN_INTERVAL));
+                   // Clear all existing markers
+                   markers.clearLayers();
+                   
+                   if (aircraft.length === 0) {
+                       console.warn("⚠️ No aircraft in response - check OpenSky API");
+                   } else {
+                       let validCount = 0;
+                       let skippedCount = 0;
+                       
+                       aircraft.forEach((ac, index) => {
+                           // Validate coordinates
+                           const lat = parseFloat(ac.latitude);
+                           const lon = parseFloat(ac.longitude);
+                           
+                           if (!lat || !lon || isNaN(lat) || isNaN(lon)) {
+                               skippedCount++;
+                               if (index < 5) { // Only log first few to avoid spam
+                                   console.warn(`⚠️ Aircraft ${index} missing/invalid coordinates:`, ac);
+                               }
+                               return;
+                           }
+                           
+                           // Validate coordinate ranges
+                           if (lat < -90 || lat > 90 || lon < -180 || lon > 180) {
+                               skippedCount++;
+                               console.warn(`⚠️ Aircraft ${index} has out-of-range coordinates:`, lat, lon);
+                               return;
+                           }
 
-    function changeUpdateFrequency() {
-        clearInterval(updateInterval);
-        let chosen = parseInt(document.getElementById("update-frequency").value);
-        updateInterval = setInterval(fetchAircraft, Math.max(chosen, MIN_INTERVAL));
-    }
+                           try {
+                               // Get aircraft properties (handle both 'country' and 'origin_country')
+                               const country = ac.origin_country || ac.country || 'N/A';
+                               const heading = parseFloat(ac.heading) || 0;
+                               const altitude = parseFloat(ac.altitude) || 0;
+                               const velocity = parseFloat(ac.velocity) || 0;
+                               
+                               // Determine marker color based on altitude (like OpenSky)
+                               let color = '#2ecc71'; // Green (medium altitude)
+                               if (altitude > 30000) color = '#e74c3c'; // Red (high altitude)
+                               if (altitude < 5000 && altitude > 0) color = '#f39c12'; // Orange (low altitude)
+                               if (ac.on_ground) color = '#95a5a6'; // Gray (on ground)
+                               
+                               // Create SVG airplane icon (like OpenSky) - better visibility
+                               const airplaneSVG = `
+                                   <svg width="20" height="20" viewBox="0 0 24 24" style="transform: rotate(${heading}deg); transform-origin: 12px 12px;">
+                                       <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" fill="${color}" stroke="#ffffff" stroke-width="1"/>
+                                   </svg>
+                               `;
+                               
+                               // Create custom airplane icon with rotation
+                               const customIcon = L.divIcon({
+                                   html: airplaneSVG,
+                                   iconSize: [20, 20],
+                                   iconAnchor: [10, 10],
+                                   className: 'aircraft-marker',
+                                   pane: 'markerPane'
+                               });
+                               
+                               const marker = L.marker([lat, lon], { 
+                                   icon: customIcon,
+                                   zIndexOffset: 1000 // Ensure aircraft appear above map tiles
+                               })
+                               .bindPopup(`
+                                   <div class="aircraft-popup" style="min-width: 200px;">
+                                       <strong style="font-size: 14px;">${ac.callsign || ac.icao24 || 'N/A'}</strong><br>
+                                       <small>ICAO: ${ac.icao24 || 'N/A'}</small><br>
+                                       Country: ${country}<br>
+                                       Altitude: ${altitude ? Math.round(altitude) + ' ft' : 'N/A'}<br>
+                                       Speed: ${velocity ? Math.round(velocity * 1.94384) + ' knots' : 'N/A'}<br>
+                                       Heading: ${heading ? Math.round(heading) + '°' : 'N/A'}<br>
+                                       On Ground: ${ac.on_ground ? 'Yes' : 'No'}
+                                   </div>
+                               `);
+                               
+                               marker.addTo(markers);
+                               validCount++;
+                               
+                           } catch (markerErr) {
+                               console.error(`❌ Error creating marker for aircraft ${index}:`, markerErr, ac);
+                               skippedCount++;
+                           }
+                       });
+                       
+                       // Count markers
+                       let markerCount = 0;
+                       markers.eachLayer(() => markerCount++);
+                       
+                       console.log(`✅ Successfully added ${markerCount} aircraft markers to map`);
+                       console.log(`   - Valid: ${validCount}, Skipped: ${skippedCount}, Total in response: ${aircraft.length}`);
+                       
+                       if (markerCount === 0 && aircraft.length > 0) {
+                           console.error(`❌ ERROR: No markers created despite ${aircraft.length} aircraft in response!`);
+                           console.error("   Check coordinate validation and marker creation code.");
+                       }
+                   }
 
-    // Debounce fetch on map move
-    map.on("moveend", () => {
-        if (fetchTimeout) clearTimeout(fetchTimeout);
-        fetchTimeout = setTimeout(fetchAircraft, MIN_INTERVAL);
-    });
+                   // Hide loading indicator
+                   const loadingEl = document.getElementById('aircraft-loading');
+                   if (loadingEl) loadingEl.style.display = 'none';
+               } catch (err) {
+                   console.error("Error processing aircraft response:", err);
+                   const loadingEl = document.getElementById('aircraft-loading');
+                   if (loadingEl) loadingEl.style.display = 'none';
+                   const countEl = document.getElementById('aircraft-count');
+                   if (countEl) countEl.innerText = 'Error';
+               }
+           }
 
-    // Initial fetch
-    fetchAircraft();
+           // Wait for map to be fully loaded before starting
+           map.whenReady(() => {
+               console.log("Map is ready, starting aircraft fetch");
+               
+               // Initial fetch after a short delay to ensure map is ready
+               setTimeout(() => {
+                   fetchAircraft();
+               }, 500);
+               
+               // Set up interval update
+               const frequencyEl = document.getElementById("update-frequency");
+               if (frequencyEl) {
+                   updateInterval = setInterval(fetchAircraft, Math.max(parseInt(frequencyEl.value) || 10000, MIN_INTERVAL));
+               }
+               
+               // Debounce fetch on map move - use longer delay to avoid rate limits
+               map.on("moveend", () => {
+                   if (fetchTimeout) clearTimeout(fetchTimeout);
+                   // Wait longer before fetching after map move to avoid rate limits
+                   fetchTimeout = setTimeout(() => {
+                       const now = Date.now();
+                       if (now >= rateLimitedUntil && now - lastFetch >= MIN_INTERVAL) {
+                           fetchAircraft();
+                       }
+                   }, Math.max(MIN_INTERVAL, 5000)); // Wait at least 5 seconds after map move
+               });
+           });
+
+           function changeUpdateFrequency() {
+               if (updateInterval) clearInterval(updateInterval);
+               const frequencyEl = document.getElementById("update-frequency");
+               if (frequencyEl) {
+                   const chosen = parseInt(frequencyEl.value) || 10000;
+                   // Ensure minimum interval is respected
+                   const actualInterval = Math.max(chosen, MIN_INTERVAL);
+                   updateInterval = setInterval(() => {
+                       const now = Date.now();
+                       if (now >= rateLimitedUntil && now - lastFetch >= MIN_INTERVAL && !isFetching) {
+                           fetchAircraft();
+                       }
+                   }, actualInterval);
+                   console.log(`Update frequency changed to ${actualInterval}ms (minimum: ${MIN_INTERVAL}ms)`);
+               }
+           }
         </script>
     </body>
 </html>

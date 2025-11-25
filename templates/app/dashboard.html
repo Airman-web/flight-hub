@@ -14,7 +14,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            background: #f5f7fa;
         }
 
         /* Navbar */
@@ -39,13 +39,14 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.5em;
-            font-weight: bold;
-            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #2c3e50;
             text-decoration: none;
+        }
+        
+        .nav-brand i {
+            color: #3498db;
         }
 
         .nav-logo {
@@ -71,25 +72,26 @@
         }
 
         .nav-links a:hover {
-            color: #FF6B35;
+            color: #3498db;
         }
 
         .btn-logout {
-            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            background: #e74c3c;
             color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 8px 16px;
+            border-radius: 6px;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .btn-logout:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.4);
+            background: #c0392b;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .user-link {
@@ -100,10 +102,7 @@
 
         /* Header */
         .header h1 {
-            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #FF6B35;
         }
 
         /* Sections */
@@ -111,10 +110,8 @@
         .stats-section h2,
         .quick-actions h2,
         .info-section h2 {
-            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #2c3e50;
+            font-weight: 600;
             margin-bottom: 30px;
             font-size: 2em;
         }
@@ -122,32 +119,32 @@
         .feature-card {
             background: white;
             padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
             cursor: pointer;
             text-align: center;
-            border: 2px solid transparent;
+            border: 1px solid #e9ecef;
             position: relative;
         }
 
         .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
-            border-color: #FF6B35;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            border-color: #3498db;
         }
 
         .feature-icon {
             font-size: 3em;
             margin-bottom: 15px;
-            color: #FF6B35;
+            color: #3498db;
         }
 
         .feature-arrow {
             position: absolute;
             right: 20px;
             top: 20px;
-            color: #FF6B35;
+            color: #3498db;
             font-size: 1.5em;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -175,10 +172,7 @@
         .stat-number {
             font-size: 3em;
             font-weight: bold;
-            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #FF6B35;
         }
 
         .stat-label {
@@ -190,23 +184,25 @@
         /* Action Buttons */
         .action-btn {
             background: white;
-            border: 2px solid #FF6B35;
+            border: 1px solid #dee2e6;
             padding: 15px 25px;
-            border-radius: 10px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-size: 1em;
-            font-weight: 600;
+            font-weight: 500;
+            color: #2c3e50;
         }
 
         .action-btn:hover {
-            background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+            background: #3498db;
             color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+            border-color: #3498db;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
         }
 
         .action-icon {
@@ -233,9 +229,9 @@
         }
 
         .btn-secondary:hover {
-            background: #FF6B35;
+            background: #3498db;
             color: white;
-            border-color: #FF6B35;
+            border-color: #3498db;
         }
 
         .footer a {
@@ -292,7 +288,7 @@
             </div>
             <div class="nav-links">
                 <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
-                <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+                <a href="{{ url_for('auth.profile') }}#contact"><i class="fas fa-envelope"></i> Contact</a>
                 <a href="{{ url_for('auth.profile') }}" class="user-link">
                     <i class="fas fa-user-circle"></i> {{ user.username }}
                 </a>

@@ -52,10 +52,8 @@ body {
 .nav-brand {
     font-size: 1.5em;
     font-weight: bold;
-    background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: #FF6B35;
+    color: #FF6B35;
     text-decoration: none;
     transition: transform 0.3s ease;
 }
@@ -84,7 +82,7 @@ body {
     left: 0;
     width: 0;
     height: 2px;
-    background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+    background: #FF6B35;
     transition: width 0.3s ease;
 }
 
@@ -98,7 +96,7 @@ body {
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+    background: #FF6B35;
     color: white;
     padding: 80px 20px;
     position: relative;
@@ -227,7 +225,7 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+    background: #FF6B35;
     color: white;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
@@ -289,7 +287,7 @@ section h2 {
 
 /* Features Section */
 .features {
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f0ff 100%);
+    background: #f8f9ff;
 }
 
 .features-grid {
@@ -373,7 +371,7 @@ section h2 {
     justify-content: center;
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+    background: #FF6B35;
     color: white;
     border-radius: 50%;
     font-size: 1.8em;
@@ -394,7 +392,7 @@ section h2 {
 
 /* APIs Section */
 .apis {
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f0ff 100%);
+    background: #f8f9ff;
 }
 
 .apis-grid {
@@ -462,7 +460,7 @@ section h2 {
 }
 
 .tech-item {
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f0ff 100%);
+    background: #f8f9ff;
     padding: 25px;
     border-radius: 12px;
     border-left: 4px solid #FF6B35;
@@ -501,7 +499,7 @@ section h2 {
 
 /* Smart Features Section */
 .smart-features {
-    background: linear-gradient(135deg, #FF6B35 0%, #5B2C6F 100%);
+    background: #FF6B35;
     color: white;
 }
 
@@ -561,7 +559,7 @@ section h2 {
 .use-case {
     text-align: center;
     padding: 30px;
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f0ff 100%);
+    background: #f8f9ff;
     border-radius: 12px;
     transition: all 0.3s ease;
     animation: slideInUp 0.6s ease-out backwards;
@@ -595,7 +593,7 @@ section h2 {
 
 /* Contact Section */
 .contact {
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f0ff 100%);
+    background: #f8f9ff;
     text-align: center;
 }
 

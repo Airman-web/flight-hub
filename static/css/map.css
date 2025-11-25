@@ -15,7 +15,7 @@
 }
 
 .leaflet-container {
-    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    background: #e3f2fd;
 }
 
 /* Aircraft Markers */
@@ -74,7 +74,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: white;
 }
 
@@ -161,7 +161,7 @@
 
 /* Selected Aircraft Info */
 .selected-aircraft {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #667eea;
     color: white;
     padding: 12px;
     border-radius: 8px;
