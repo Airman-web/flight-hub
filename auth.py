@@ -13,6 +13,15 @@ GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID')
 GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET')
 GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
 
+def get_google_redirect_uri():
+    """Return Google redirect URI based on environment."""
+    if os.getenv("FLASK_ENV") == "production":
+        GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI', 'https://atigbi.tech/auth/google/callback')  
+    else: 
+    
+        return url_for('auth.google_callback', _external=True)
+
+
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     """Login page"""
@@ -32,7 +41,6 @@ def login():
         else:
             flash('❌ Invalid email or password', 'error')
     
-    # Check if Google OAuth is configured
     google_oauth_enabled = bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET)
     
     return render_template('auth/login.html', google_oauth_enabled=google_oauth_enabled)
@@ -49,7 +57,6 @@ def signup():
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
         
-        # Validation
         if not email or not username or not password:
             flash('❌ All fields are required', 'error')
             return redirect(url_for('auth.signup'))
@@ -62,7 +69,6 @@ def signup():
             flash('❌ Password must be at least 6 characters', 'error')
             return redirect(url_for('auth.signup'))
         
-        # Check if user exists
         if User.query.filter_by(email=email).first():
             flash('❌ Email already registered', 'error')
             return redirect(url_for('auth.signup'))
@@ -71,14 +77,12 @@ def signup():
             flash('❌ Username already taken', 'error')
             return redirect(url_for('auth.signup'))
         
-        # Create new user
         user = User(email=email, username=username)
         user.set_password(password)
         
         db.session.add(user)
         db.session.commit()
         
-        # Create user preferences
         preferences = UserPreferences(user_id=user.id)
         db.session.add(preferences)
         db.session.commit()
@@ -86,16 +90,13 @@ def signup():
         flash('✅ Account created successfully! Please login.', 'success')
         return redirect(url_for('auth.login'))
     
-    # Check if Google OAuth is configured
     google_oauth_enabled = bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET)
     
-    # Signup is handled in login.html with tabs, so we redirect to login with signup tab
     return render_template('auth/login.html', google_oauth_enabled=google_oauth_enabled, show_signup=True)
 
 @auth_bp.route('/logout')
 @login_required
 def logout():
-    """Logout user"""
     logout_user()
     flash('✅ Logged out successfully!', 'success')
     return redirect(url_for('auth.login'))
@@ -103,7 +104,6 @@ def logout():
 @auth_bp.route('/google/login')
 def google_login():
     """Start Google OAuth flow"""
-    # Check if Google OAuth is configured
     if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
         flash('❌ Google OAuth is not configured. Please use email/password login.', 'error')
         return redirect(url_for('auth.login'))
@@ -115,11 +115,11 @@ def google_login():
         request_uri = (
             f"{authorization_endpoint}"
             f"?client_id={GOOGLE_CLIENT_ID}"
-            f"&redirect_uri={url_for('auth.google_callback', _external=True)}"
+            f"&redirect_uri={get_google_redirect_uri()}"
             f"&response_type=code"
             f"&scope=openid email profile"
-            f"&prompt=select_account"           # <-- Forces account chooser
-            f"&access_type=offline"             # <-- Needed for refresh token
+            f"&prompt=select_account"
+            f"&access_type=offline"
         )
 
         return redirect(request_uri)
@@ -128,16 +128,13 @@ def google_login():
         flash('❌ Google login is currently unavailable. Please use email/password login.', 'error')
         return redirect(url_for('auth.login'))
 
-
 @auth_bp.route('/google/callback')
 def google_callback():
     """Handle Google OAuth callback"""
-    # Check if Google OAuth is configured first
     if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
         flash('❌ Google OAuth is not configured. Please use email/password login.', 'error')
         return redirect(url_for('auth.login'))
     
-    # Check for error from Google
     error = request.args.get('error')
     if error:
         error_description = request.args.get('error_description', 'Unknown error')
@@ -153,13 +150,11 @@ def google_callback():
         return redirect(url_for('auth.login'))
     
     code = request.args.get('code')
-    
     if not code:
         flash('❌ Authorization failed. No authorization code received.', 'error')
         return redirect(url_for('auth.login'))
     
     try:
-        # Get token from Google
         google_config = requests.get(GOOGLE_DISCOVERY_URL).json()
         token_endpoint = google_config["token_endpoint"]
         
@@ -167,13 +162,11 @@ def google_callback():
             'code': code,
             'client_id': GOOGLE_CLIENT_ID,
             'client_secret': GOOGLE_CLIENT_SECRET,
-            'redirect_uri': url_for('auth.google_callback', _external=True),
+            'redirect_uri': get_google_redirect_uri(),
             'grant_type': 'authorization_code'
         }
         
         response = requests.post(token_endpoint, data=token_data)
-        
-        # Check if token request was successful
         if response.status_code != 200:
             error_data = response.json() if response.content else {}
             error_msg = error_data.get('error_description', error_data.get('error', 'Token request failed'))
@@ -182,8 +175,6 @@ def google_callback():
             return redirect(url_for('auth.login'))
         
         tokens = response.json()
-        
-        # Check if we got an error in the response
         if 'error' in tokens:
             error_msg = tokens.get('error_description', tokens.get('error', 'Unknown error'))
             print(f"Google OAuth Token Error: {error_msg}")
@@ -195,7 +186,6 @@ def google_callback():
             flash('❌ Google login failed. Please use email/password login.', 'error')
             return redirect(url_for('auth.login'))
         
-        # Get user info from Google
         userinfo_endpoint = google_config["userinfo_endpoint"]
         userinfo_response = requests.get(
             userinfo_endpoint,
@@ -208,12 +198,9 @@ def google_callback():
             return redirect(url_for('auth.login'))
         
         userinfo = userinfo_response.json()
-        
-        # Check if user exists
         user = User.query.filter_by(google_id=userinfo['sub']).first()
         
         if not user:
-            # Create new user from Google data
             user = User(
                 email=userinfo['email'],
                 username=userinfo.get('name', userinfo['email'].split('@')[0]),
@@ -223,12 +210,10 @@ def google_callback():
             db.session.add(user)
             db.session.commit()
             
-            # Create user preferences
             preferences = UserPreferences(user_id=user.id)
             db.session.add(preferences)
             db.session.commit()
         
-        # Login user
         login_user(user)
         flash(f'✅ Welcome, {user.username}!', 'success')
         return redirect(url_for('dashboard'))
@@ -243,11 +228,9 @@ def google_callback():
 @auth_bp.route('/profile')
 @login_required
 def profile():
-    """User profile page"""
     return render_template('auth/profile.html', user=current_user)
 
 @auth_bp.route('/api/user')
 @login_required
 def get_user_data():
-    """Get current user data as JSON"""
     return jsonify(current_user.to_dict())
