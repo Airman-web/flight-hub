@@ -148,15 +148,18 @@ def google_login():
     try:
         google_config = requests.get(GOOGLE_DISCOVERY_URL).json()
         authorization_endpoint = google_config["authorization_endpoint"]
+        
+        # Dynamic redirect URI based on current request
+        redirect_uri = url_for('auth.google_callback', _external=True, _scheme='https')
 
         request_uri = (
             f"{authorization_endpoint}"
             f"?client_id={GOOGLE_CLIENT_ID}"
-            f"&redirect_uri=https://atigbi.tech/auth/google/callback"
+            f"&redirect_uri={redirect_uri}"
             f"&response_type=code"
             f"&scope=openid email profile"
-            f"&prompt=select_account"           # <-- Forces account chooser
-            f"&access_type=offline"             # <-- Needed for refresh token
+            f"&prompt=select_account"
+            f"&access_type=offline"
         )
 
         return redirect(request_uri)
@@ -164,7 +167,6 @@ def google_login():
         print(f"Google OAuth Error: {str(e)}")
         flash('❌ Google login is currently unavailable. Please use email/password login.', 'error')
         return redirect(url_for('auth.login'))
-
 
 @auth_bp.route('/google/callback')
 def google_callback():
@@ -200,11 +202,14 @@ def google_callback():
         google_config = requests.get(GOOGLE_DISCOVERY_URL).json()
         token_endpoint = google_config["token_endpoint"]
         
+        # Dynamic redirect URI
+        redirect_uri = url_for('auth.google_callback', _external=True, _scheme='https')
+        
         token_data = {
             'code': code,
             'client_id': GOOGLE_CLIENT_ID,
             'client_secret': GOOGLE_CLIENT_SECRET,
-            'redirect_uri': 'https://atigbi.tech/auth/google/callback',
+            'redirect_uri': redirect_uri,
             'grant_type': 'authorization_code'
         }
         
@@ -250,20 +255,28 @@ def google_callback():
         user = User.query.filter_by(google_id=userinfo['sub']).first()
         
         if not user:
-            # Create new user from Google data
-            user = User(
-                email=userinfo['email'],
-                username=userinfo.get('name', userinfo['email'].split('@')[0]),
-                google_id=userinfo['sub'],
-                profile_picture=userinfo.get('picture')
-            )
-            db.session.add(user)
-            db.session.commit()
-            
-            # Create user preferences
-            preferences = UserPreferences(user_id=user.id)
-            db.session.add(preferences)
-            db.session.commit()
+            # Check if email already exists
+            user = User.query.filter_by(email=userinfo['email']).first()
+            if user:
+                # Link Google account to existing user
+                user.google_id = userinfo['sub']
+                user.profile_picture = userinfo.get('picture')
+                db.session.commit()
+            else:
+                # Create new user from Google data
+                user = User(
+                    email=userinfo['email'],
+                    username=userinfo.get('name', userinfo['email'].split('@')[0]),
+                    google_id=userinfo['sub'],
+                    profile_picture=userinfo.get('picture')
+                )
+                db.session.add(user)
+                db.session.commit()
+                
+                # Create user preferences
+                preferences = UserPreferences(user_id=user.id)
+                db.session.add(preferences)
+                db.session.commit()
         
         # Login user
         login_user(user)
@@ -276,7 +289,7 @@ def google_callback():
         traceback.print_exc()
         flash('❌ Google login failed. Please use email/password login.', 'error')
         return redirect(url_for('auth.login'))
-
+    
 @auth_bp.route('/profile')
 @login_required
 def profile():
