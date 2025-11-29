@@ -13,6 +13,13 @@ load_dotenv()
 
 app = Flask(__name__)
 
+@app.after_request
+def add_server_header(response):
+    """Add X-Served-By header to identify which server handled the request"""
+    import socket
+    response.headers['X-Served-By'] = socket.gethostname()
+    return response
+
 # Ensure instance folder exists
 instance_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'instance')
 os.makedirs(instance_path, exist_ok=True)
