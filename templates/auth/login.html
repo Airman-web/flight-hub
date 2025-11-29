@@ -59,361 +59,83 @@
                 </form>
 
                 <div class="divider">or continue with</div>
-                <button type="button" class="btn btn-google btn-block" onclick="handleGoogleSignIn()" aria-label="Continue with Google">
-                    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-                        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
-                        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
-                        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
-                        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
-                    </svg>
-                    Continue with Google
-                </button>
+<a href="/auth/google/login" class="btn btn-google btn-block" aria-label="Continue with Google"></a>
+    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true"></svg>
+        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
+        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
+        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
+        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
+    </svg>
+    Continue with Google
+</a>
 
-                <div class="auth-links">
-                    <a href="forgot_password.html"><i class="fas fa-key"></i> Forgot Password?</a>
-                    <span class="divider-text">•</span>
-                    <a href="#" onclick="showTab(event, 'signup')"><i class="fas fa-user-plus"></i> Create account</a>
-                </div>
-            </div>
+<div class="auth-links">
+    <a href="forgot_password.html"><i class="fas fa-key"></i> Forgot Password?</a>
+    <span class="divider-text">•</span>
+    <a href="#" onclick="showTab(event, 'signup')"><i class="fas fa-user-plus"></i> Create account</a>
+</div>
+</div>
 
-            <div id="signup" class="auth-form" role="tabpanel">
-                <h2>Create Account</h2>
-                <form id="signup-form" onsubmit="handleSignup(event)">
-                    <div class="form-group">
-                        <label for="username">
-                            <i class="fas fa-user"></i> Username
-                        </label>
-                        <input type="text" id="username" name="username" required placeholder="your_username" autocomplete="username">
-                    </div>
+<div id="signup" class="auth-form" role="tabpanel">
+<h2>Create Account</h2>
+<form id="signup-form" onsubmit="handleSignup(event)">
+    <div class="form-group">
+        <label for="username">
+            <i class="fas fa-user"></i> Username
+        </label>
+        <input type="text" id="username" name="username" required placeholder="your_username" autocomplete="username">
+    </div>
 
-                    <div class="form-group">
-                        <label for="signup-email">
-                            <i class="fas fa-envelope"></i> Email
-                        </label>
-                        <input type="email" id="signup-email" name="email" required placeholder="you@example.com" autocomplete="email">
-                    </div>
+    <div class="form-group">
+        <label for="signup-email">
+            <i class="fas fa-envelope"></i> Email
+        </label>
+        <input type="email" id="signup-email" name="email" required placeholder="you@example.com" autocomplete="email">
+    </div>
 
-                    <div class="form-group">
-                        <label for="signup-password">
-                            <i class="fas fa-lock"></i> Password
-                        </label>
-                        <div class="password-wrapper">
-                            <input type="password" id="signup-password" name="password" required minlength="6" placeholder="Create a password" autocomplete="new-password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('signup-password', this)" aria-label="Toggle password visibility">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="confirm-password">
-                            <i class="fas fa-check-circle"></i> Confirm Password
-                        </label>
-                        <div class="password-wrapper">
-                            <input type="password" id="confirm-password" name="confirm_password" required placeholder="Re-enter password" autocomplete="new-password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('confirm-password', this)" aria-label="Toggle password visibility">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-block">
-                        <i class="fas fa-user-plus"></i> Create Account
-                    </button>
-                </form>
-
-                <div class="divider">or continue with</div>
-                <button type="button" class="btn btn-google btn-block" onclick="handleGoogleSignIn()" aria-label="Sign up with Google">
-                    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-                        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
-                        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
-                        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
-                        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
-                    </svg>
-                    Sign up with Google
-                </button>
-
-                <div class="auth-links single">
-                    <a href="#" onclick="showTab(event, 'login')"><i class="fas fa-arrow-left"></i> Back to login</a>
-                </div>
-            </div>
+    <div class="form-group">
+        <label for="signup-password">
+            <i class="fas fa-lock"></i> Password
+        </label>
+        <div class="password-wrapper">
+            <input type="password" id="signup-password" name="password" required minlength="6" placeholder="Create a password" autocomplete="new-password">
+            <button type="button" class="password-toggle" onclick="togglePassword('signup-password', this)" aria-label="Toggle password visibility">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+            </button>
         </div>
     </div>
 
-    <footer class="auth-footer">
-        <p>&copy; 2025 FlightHub. All rights reserved.</p>
-            <p>
-            <a href="../../templates/about.html"><i class="fas fa-info-circle"></i> About</a>
-            <span>•</span>
-            <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
-            <span>•</span>
-            <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
-        </p>
-    </footer>
+    <div class="form-group">
+        <label for="confirm-password">
+            <i class="fas fa-check-circle"></i> Confirm Password
+        </label>
+        <div class="password-wrapper">
+            <input type="password" id="confirm-password" name="confirm_password" required placeholder="Re-enter password" autocomplete="new-password">
+            <button type="button" class="password-toggle" onclick="togglePassword('confirm-password', this)" aria-label="Toggle password visibility">
+                <i class="fa fa-eye" aria-hidden="true"></i>
+            </button>
+        </div>
+    </div>
 
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <button type="submit" class="btn btn-primary btn-block">
+        <i class="fas fa-user-plus"></i> Create Account
+    </button>
+</form>
 
-    <script>
-        // Authentication state management
-        const API_BASE_URL = window.location.origin; // Adjust if your API is on a different domain
-        
-        // Check if user is already logged in
-        window.addEventListener('DOMContentLoaded', function() {
-            const user = localStorage.getItem('user');
-            if (user) {
-                window.location.href = '../app/dashboard.html';
-            }
-        });
+<div class="divider">or continue with</div>
+<button type="button" class="btn btn-google btn-block" onclick="handleGoogleSignIn()" aria-label="Sign up with Google">
+    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
+        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
+        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
+        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
+    </svg>
+    Sign up with Google
+</button>
 
-        function showTab(evt, tabName) {
-            // Hide all forms
-            document.querySelectorAll('.auth-form').forEach(form => {
-                form.classList.remove('active');
-            });
-            document.querySelectorAll('.auth-tab').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Show selected form
-            document.getElementById(tabName).classList.add('active');
-            const trigger = evt && evt.target ? evt.target.closest('.auth-tab') : null;
-            if (trigger) {
-                trigger.classList.add('active');
-            }
-        }
-
-        function togglePassword(inputId, button) {
-            const passwordInput = document.getElementById(inputId);
-            const icon = button.querySelector('i');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-
-        function showAlert(message, type) {
-            const alertContainer = document.getElementById('alert-container');
-            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
-            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
-            
-            alertContainer.innerHTML = `
-                <div class="alert ${alertClass}">
-                    <i class="fas fa-${icon}"></i>
-                    ${message}
-                </div>
-            `;
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                alertContainer.innerHTML = '';
-            }, 5000);
-        }
-
-        async function handleLogin(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const email = formData.get('email');
-            const password = formData.get('password');
-
-            try {
-                // For now, we'll use localStorage for demo purposes
-                // In production, this would call your backend API
-                const response = await fetch(`${API_BASE_URL}/auth/login`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    localStorage.setItem('token', data.token || 'demo-token');
-                    showAlert('✅ Logged in successfully!', 'success');
-                    setTimeout(() => {
-                        window.location.href = '../app/dashboard.html';
-                    }, 1000);
-                } else {
-                    const error = await response.json();
-                    showAlert('❌ ' + (error.message || 'Invalid email or password'), 'error');
-                }
-            } catch (error) {
-                // Fallback: Use localStorage for demo (remove in production)
-                const users = JSON.parse(localStorage.getItem('users') || '[]');
-                const user = users.find(u => u.email === email && u.password === password);
-                
-                if (user) {
-                    localStorage.setItem('user', JSON.stringify({ email: user.email, username: user.username }));
-                    showAlert('✅ Logged in successfully!', 'success');
-                    setTimeout(() => {
-                        window.location.href = '../app/dashboard.html';
-                    }, 1000);
-                } else {
-                    showAlert('❌ Invalid email or password', 'error');
-                }
-            }
-        }
-
-        async function handleSignup(event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            const username = formData.get('username');
-            const email = formData.get('email');
-            const password = formData.get('password');
-            const confirmPassword = formData.get('confirm_password');
-
-            if (password !== confirmPassword) {
-                showAlert('❌ Passwords do not match', 'error');
-                return;
-            }
-
-            if (password.length < 6) {
-                showAlert('❌ Password must be at least 6 characters', 'error');
-                return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/auth/signup`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, email, password })
-                });
-
-                if (response.ok) {
-                    showAlert('✅ Account created successfully! Please login.', 'success');
-                    setTimeout(() => {
-                        showTab(event, 'login');
-                    }, 1500);
-                } else {
-                    const error = await response.json();
-                    showAlert('❌ ' + (error.message || 'Failed to create account'), 'error');
-                }
-            } catch (error) {
-                // Fallback: Use localStorage for demo
-                const users = JSON.parse(localStorage.getItem('users') || '[]');
-                if (users.find(u => u.email === email)) {
-                    showAlert('❌ Email already registered', 'error');
-                    return;
-                }
-                if (users.find(u => u.username === username)) {
-                    showAlert('❌ Username already taken', 'error');
-                    return;
-                }
-                
-                users.push({ username, email, password });
-                localStorage.setItem('users', JSON.stringify(users));
-                showAlert('✅ Account created successfully! Please login.', 'success');
-                setTimeout(() => {
-                    showTab(event, 'login');
-                }, 1500);
-            }
-        }
-
-        // Google Sign-In using Google Identity Services
-        let googleClientId = null;
-        
-        // Initialize Google Sign-In when the library loads
-        window.addEventListener('load', function() {
-            if (typeof google !== 'undefined' && google.accounts) {
-                // Get Google Client ID from environment or use a placeholder
-                // In production, this should come from your backend or environment variable
-                googleClientId = 'YOUR_GOOGLE_CLIENT_ID'; // Replace with your actual Google Client ID
-                
-                if (googleClientId && googleClientId !== 'YOUR_GOOGLE_CLIENT_ID') {
-                    google.accounts.id.initialize({
-                        client_id: googleClientId,
-                        callback: handleGoogleResponse
-                    });
-                }
-            }
-        });
-
-        function handleGoogleSignIn() {
-            if (!googleClientId || googleClientId === 'YOUR_GOOGLE_CLIENT_ID') {
-                showAlert('❌ Google OAuth is not configured. Please use email/password login.', 'error');
-                return;
-            }
-
-            try {
-                if (typeof google !== 'undefined' && google.accounts) {
-                    // Use One Tap or button flow
-                    google.accounts.oauth2.initTokenClient({
-                        client_id: googleClientId,
-                        scope: 'email profile',
-                        callback: handleGoogleTokenResponse
-                    }).requestAccessToken();
-                } else {
-                    showAlert('❌ Google Sign-In library not loaded. Please refresh the page.', 'error');
-                }
-            } catch (error) {
-                showAlert('❌ Google login failed. Please try again.', 'error');
-            }
-        }
-
-        function handleGoogleResponse(response) {
-            try {
-                // Decode the JWT token
-                const payload = JSON.parse(atob(response.credential.split('.')[1]));
-                
-                // Store user info
-                const user = {
-                    email: payload.email,
-                    username: payload.name || payload.email.split('@')[0],
-                    picture: payload.picture,
-                    googleId: payload.sub
-                };
-                
-                localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('token', response.credential);
-                showAlert('✅ Logged in with Google successfully!', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1000);
-            } catch (error) {
-                showAlert('❌ Failed to process Google login. Please try again.', 'error');
-            }
-        }
-
-        function handleGoogleTokenResponse(tokenResponse) {
-            // Fetch user info from Google
-            fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-                headers: {
-                    'Authorization': `Bearer ${tokenResponse.access_token}`
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                const user = {
-                    email: data.email,
-                    username: data.name || data.email.split('@')[0],
-                    picture: data.picture,
-                    googleId: data.id
-                };
-                
-                localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('token', tokenResponse.access_token);
-                showAlert('✅ Logged in with Google successfully!', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1000);
-            })
-            .catch(error => {
-                showAlert('❌ Google login failed. Please try again.', 'error');
-            });
-        }
-    </script>
-</body>
+<div class="auth-links single">
+    <a href="#" onclick="showTab(event, 'login')"><i class="fas fa-arrow-left"></i> Back to login</a>
+</div>
+</div>
 </html>
 

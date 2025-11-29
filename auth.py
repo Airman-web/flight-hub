@@ -152,7 +152,7 @@ def google_login():
         request_uri = (
             f"{authorization_endpoint}"
             f"?client_id={GOOGLE_CLIENT_ID}"
-            f"&redirect_uri={url_for('auth.google_callback', _external=True)}"
+            f"&redirect_uri=https://atigbi.tech/auth/google/callback"
             f"&response_type=code"
             f"&scope=openid email profile"
             f"&prompt=select_account"           # <-- Forces account chooser
@@ -204,7 +204,7 @@ def google_callback():
             'code': code,
             'client_id': GOOGLE_CLIENT_ID,
             'client_secret': GOOGLE_CLIENT_SECRET,
-            'redirect_uri': url_for('auth.google_callback', _external=True),
+            'redirect_uri': 'https://atigbi.tech/auth/google/callback',
             'grant_type': 'authorization_code'
         }
         
