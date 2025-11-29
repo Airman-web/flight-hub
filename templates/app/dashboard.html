@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - FlightHub</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ALU Color Override */
+        /* ALU Color Override - Solid Colors Only */
         :root {
             --primary-color: #FF6B35;
             --secondary-color: #5B2C6F;
@@ -274,8 +274,6 @@
             margin-right: 5px;
             color: #FF6B35;
         }
-
-
     </style>
 </head>
 <body>
@@ -287,12 +285,12 @@
                 <span>FlightHub</span>
             </div>
             <div class="nav-links">
-                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
-                <a href="{{ url_for('auth.profile') }}#contact"><i class="fas fa-envelope"></i> Contact</a>
-                <a href="{{ url_for('auth.profile') }}" class="user-link">
-                    <i class="fas fa-user-circle"></i> {{ user.username }}
+                <a href="../about.html"><i class="fas fa-info-circle"></i> About</a>
+                <a href="../auth/profile.html#contact"><i class="fas fa-envelope"></i> Contact</a>
+                <a href="../auth/profile.html" class="user-link">
+                    <i class="fas fa-user-circle"></i> <span id="username-display">User</span>
                 </a>
-                <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                <a href="#" onclick="handleLogout()" class="btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
@@ -303,7 +301,7 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <h1>Welcome, {{ user.username }}!</h1>
+                <h1>Welcome, <span id="welcome-username">User</span>!</h1>
                 <p>Choose what you'd like to explore</p>
             </div>
         </div>
@@ -317,7 +315,7 @@
             
             <div class="feature-grid">
                 <!-- Flights Feature -->
-                <a href="{{ url_for('flights_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="flights.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon">
                         <i class="fas fa-plane-departure"></i>
                     </div>
@@ -327,7 +325,7 @@
                 </a>
 
                 <!-- Live Aircraft Feature -->
-                <a href="{{ url_for('aircraft_map') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="aircraft_map.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
@@ -337,7 +335,7 @@
                 </a>
 
                 <!-- Weather Feature -->
-                <a href="{{ url_for('weather_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="weather.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon">
                         <i class="fas fa-cloud-sun"></i>
                     </div>
@@ -347,7 +345,7 @@
                 </a>
 
                 <!-- Airports Feature -->
-                <a href="{{ url_for('airports_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="airports.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon">
                         <i class="fas fa-building"></i>
                     </div>
@@ -357,7 +355,7 @@
                 </a>
 
                 <!-- Airlines Feature -->
-                <a href="{{ url_for('airlines_page') }}" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="airlines.html" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon">
                         <i class="fas fa-plane"></i>
                     </div>
@@ -366,16 +364,15 @@
                     <span class="feature-arrow">→</span>
                 </a>
 
-            <!-- History Feature -->
-            <a href="{{ url_for('get_search_history') }}" class="feature-card" style="text-decoration: none; color: inherit;">
-                <div class="feature-icon">
-                    <i class="fas fa-history"></i>
-                </div>
-                <h3>Search History</h3>
-                <p>Your recent searches and saved data</p>
-                <span class="feature-arrow">→</span>
-            </a>
-
+                <!-- History Feature -->
+                <a href="#" class="feature-card" style="text-decoration: none; color: inherit;" onclick="showHistory()">
+                    <div class="feature-icon">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>Search History</h3>
+                    <p>Your recent searches and saved data</p>
+                    <span class="feature-arrow">→</span>
+                </a>
             </div>
         </section>
 
@@ -406,19 +403,19 @@
         <section class="quick-actions">
             <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
             <div class="actions-grid">
-                <button class="action-btn" onclick="window.location.href='{{ url_for('flights_page') }}'">
+                <button class="action-btn" onclick="window.location.href='flights.html'">
                     <span class="action-icon"><i class="fas fa-search"></i></span>
                     <span>Search Flights</span>
                 </button>
-                <button class="action-btn" onclick="window.location.href='{{ url_for('weather_page') }}'">
+                <button class="action-btn" onclick="window.location.href='weather.html'">
                     <span class="action-icon"><i class="fas fa-temperature-high"></i></span>
                     <span>Check Weather</span>
                 </button>
-                <button class="action-btn" onclick="window.location.href='{{ url_for('aircraft_map') }}'">
+                <button class="action-btn" onclick="window.location.href='aircraft_map.html'">
                     <span class="action-icon"><i class="fas fa-globe"></i></span>
                     <span>View Live Map</span>
                 </button>
-                <button class="action-btn" onclick="window.location.href='{{ url_for('airlines_page') }}'">
+                <button class="action-btn" onclick="window.location.href='airlines.html'">
                     <span class="action-icon"><i class="fas fa-list"></i></span>
                     <span>Browse Airlines</span>
                 </button>
@@ -438,36 +435,69 @@
     </div>
 
     <!-- Footer -->
-   <footer class="footer">
-    <div class="container">
-        <p><i class="fas fa-plane"></i> FlightHub - Aviation Intelligence Dashboard</p>
-        <p>
-            Powered by 
-            <a href="https://aviationstack.com" target="_blank">AviationStack</a>, 
-            <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>, 
-            & <a href="https://opensky-network.org" target="_blank">OpenSky Network</a>
-        </p>
-        <p>&copy; 2025 FlightHub. All rights reserved.</p>
-    </div>
-</footer>
-
+    <footer class="footer">
+        <div class="container">
+            <p><i class="fas fa-plane"></i> FlightHub - Aviation Intelligence Dashboard</p>
+            <p>
+                Powered by 
+                <a href="https://aviationstack.com" target="_blank">AviationStack</a>, 
+                <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>, 
+                & <a href="https://opensky-network.org" target="_blank">OpenSky Network</a>
+            </p>
+            <p>&copy; 2025 FlightHub. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script>
+        const API_BASE_URL = window.location.origin;
+
+        // Check authentication
+        window.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = '../auth/login.html';
+                return;
+            }
+            
+            const userData = JSON.parse(user);
+            const username = userData.username || 'User';
+            document.getElementById('username-display').textContent = username;
+            document.getElementById('welcome-username').textContent = username;
+            
+            loadCacheInfo();
+        });
+
+        function handleLogout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '../auth/login.html';
+        }
+
+        function showHistory() {
+            alert('Search history feature - Coming soon!');
+        }
+
         // Load cache info
         async function loadCacheInfo() {
             try {
-                const response = await fetch('/api/cache/info');
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_BASE_URL}/api/cache/info`, {
+                    headers: {
+                        'Authorization': `Bearer ${token || ''}`
+                    }
+                });
                 const data = await response.json();
                 
                 document.getElementById('cache-info').innerHTML = `
-                    <p><i class="fas fa-chart-bar"></i> <strong>Cached Items:</strong> ${data.total_cached_items}</p>
-                    <p><i class="fas fa-sync-alt"></i> <strong>API Calls Made:</strong> ${data.api_calls_made}</p>
-                    <p><i class="fas fa-bolt"></i> <strong>API Savings:</strong> ~${(90 * data.total_cached_items).toFixed(0)}% reduction in requests</p>
+                    <p><i class="fas fa-chart-bar"></i> <strong>Cached Items:</strong> ${data.total_cached_items || 0}</p>
+                    <p><i class="fas fa-sync-alt"></i> <strong>API Calls Made:</strong> ${data.api_calls_made || 0}</p>
+                    <p><i class="fas fa-bolt"></i> <strong>API Savings:</strong> ~${(90 * (data.total_cached_items || 0)).toFixed(0)}% reduction in requests</p>
                 `;
                 
-                document.getElementById('cache-items').textContent = data.total_cached_items;
+                document.getElementById('cache-items').textContent = data.total_cached_items || 0;
             } catch (error) {
                 console.error('Failed to load cache info:', error);
+                document.getElementById('cache-info').innerHTML = '<p>Cache information unavailable</p>';
             }
         }
 
@@ -475,7 +505,13 @@
         async function clearCache() {
             if (confirm('Are you sure you want to clear the cache?')) {
                 try {
-                    const response = await fetch('/api/cache/clear', { method: 'POST' });
+                    const token = localStorage.getItem('token');
+                    const response = await fetch(`${API_BASE_URL}/api/cache/clear`, { 
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token || ''}`
+                        }
+                    });
                     const data = await response.json();
                     alert('✅ Cache cleared successfully!');
                     loadCacheInfo();
@@ -484,9 +520,6 @@
                 }
             }
         }
-
-        // Load cache info on page load
-        document.addEventListener('DOMContentLoaded', loadCacheInfo);
     </script>
 </body>
 </html>

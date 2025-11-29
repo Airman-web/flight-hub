@@ -4,550 +4,169 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - FlightHub</title>
+    <link rel="stylesheet" href="../../static/css/auth.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --alu-orange: #FF6B35;
-            --alu-purple: #5B2C6F;
-            --white: #ffffff;
-            --light-gray: #f5f5f5;
-            --border-gray: #ddd;
-            --text-dark: #333;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background: var(--alu-orange);
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        .auth-container {
-            position: relative;
-            width: 100%;
-            max-width: 450px;
-            z-index: 1;
-        }
-
-        .auth-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-
-        .auth-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .auth-header h1 {
-            color: var(--alu-orange);
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .auth-header h1 i {
-            color: var(--alu-orange);
-            -webkit-text-fill-color: var(--alu-orange);
-        }
-
-        .auth-header p {
-            color: #666;
-            font-size: 0.95em;
-        }
-
-        .alert {
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border-left: 4px solid #28a745;
-        }
-
-        .alert-danger {
-            background-color: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-        }
-
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            background: var(--light-gray);
-            color: #666;
-            font-size: 1em;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .auth-tab.active {
-            background: var(--alu-orange);
-            color: white;
-        }
-
-        .auth-tab:hover:not(.active) {
-            background: #e0e0e0;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .auth-form h2 {
-            color: var(--alu-purple);
-            margin-bottom: 25px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-dark);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .form-group label i {
-            color: var(--alu-orange);
-            font-size: 0.9em;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--border-gray);
-            border-radius: 8px;
-            font-size: 1em;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--alu-orange);
-        }
-
-        .password-wrapper {
-            position: relative;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #666;
-            padding: 5px;
-        }
-
-        .password-toggle:hover {
-            color: var(--alu-orange);
-        }
-
-        .btn {
-            padding: 14px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-weight: 500;
-        }
-
-        .btn-primary {
-            background: var(--alu-orange);
-            color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
-        }
-
-        .btn-google {
-            background: white;
-            color: var(--text-dark);
-            border: 2px solid var(--border-gray);
-        }
-
-        .btn-google:hover {
-            border-color: var(--alu-orange);
-            background: var(--light-gray);
-        }
-
-        .btn-block {
-            width: 100%;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 25px 0;
-            color: #999;
-            position: relative;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: 40%;
-            height: 1px;
-            background: var(--border-gray);
-        }
-
-        .divider::before {
-            left: 0;
-        }
-
-        .divider::after {
-            right: 0;
-        }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: 25px;
-            color: #666;
-        }
-
-        .auth-footer a {
-            color: var(--alu-orange);
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .auth-footer a:hover {
-            color: var(--alu-purple);
-            text-decoration: underline;
-        }
-
-        .auth-links {
-            text-align: center;
-            margin-top: 15px;
-        }
-
-        .auth-links a {
-            color: var(--alu-orange);
-            text-decoration: none;
-            font-size: 0.9em;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .auth-links a:hover {
-            color: var(--alu-purple);
-            text-decoration: underline;
-        }
-
-        .plane-animation {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            opacity: 0.1;
-            animation: fly 15s linear infinite;
-        }
-
-        .plane-animation::before {
-            content: '\f5b0';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            font-size: 60px;
-            color: white;
-        }
-
-        @keyframes fly {
-            0% {
-                left: -100px;
-                top: 20%;
-            }
-            100% {
-                left: 100%;
-                top: 80%;
-            }
-        }
-
-        /* Footer Styles - Matching about.html */
-        .footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            margin-top: auto;
-        }
-
-        .footer .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer p {
-            margin: 10px 0;
-            line-height: 1.6;
-        }
-
-        .footer a {
-            color: var(--alu-orange);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .footer a:hover {
-            color: var(--alu-purple);
-            text-decoration: underline;
-        }
-
-        .footer a i {
-            font-size: 0.9em;
-        }
-
-        @media (max-width: 768px) {
-            .auth-card {
-                padding: 30px 20px;
-            }
-
-            .auth-header h1 {
-                font-size: 2em;
-            }
-
-            .auth-tabs {
-                flex-direction: row;
-            }
-
-            .footer p {
-                font-size: 0.9em;
-            }
-        }
-    </style>
 </head>
-<body>
-    <div class="main-content">
-        <div class="auth-container">
-            <div class="auth-card">
-                <div class="auth-header">
-                    <h1><i class="fas fa-plane-departure"></i> FlightHub</h1>
-                    <p>Aviation Intelligence Platform</p>
+<body class="auth-body">
+    <div class="auth-page">
+        <div class="auth-card" role="main">
+            <div class="auth-header">
+                <div class="logo-mark">
+                    <i class="fas fa-plane-departure"></i>
                 </div>
-
-                <!-- Flash Messages -->
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="alert alert-{{ category }}">
-                                <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-
-                <div class="auth-tabs">
-                    <button class="auth-tab {% if not show_signup %}active{% endif %}" onclick="showTab('login')">
-                        <i class="fas fa-sign-in-alt"></i> Login
-                    </button>
-                    <button class="auth-tab {% if show_signup %}active{% endif %}" onclick="showTab('signup')">
-                        <i class="fas fa-user-plus"></i> Sign Up
-                    </button>
-                </div>
-
-                <!-- Login Form -->
-                <div id="login" class="auth-form {% if not show_signup %}active{% endif %}">
-                    <h2>Welcome Back</h2>
-                    <form method="POST" action="{{ url_for('auth.login') }}">
-                        <div class="form-group">
-                            <label for="email">
-                                <i class="fas fa-envelope"></i> Email
-                            </label>
-                            <input type="email" id="email" name="email" required placeholder="your@email.com">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="password">
-                                <i class="fas fa-lock"></i> Password
-                            </label>
-                            <div class="password-wrapper">
-                                <input type="password" id="password" name="password" required placeholder="••••••••">
-                                <button type="button" class="password-toggle" onclick="togglePassword('password', this)" aria-label="Toggle password visibility">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </button>
-                    </form>
-
-                    {% if google_oauth_enabled %}
-                    <div class="divider">or</div>
-
-                    <a href="{{ url_for('auth.google_login') }}" class="btn btn-google btn-block" aria-label="Continue with Google">
-                        <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-                            <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
-                            <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
-                            <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
-                            <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
-                        </svg>
-                        Continue with Google
-                    </a>
-                    {% endif %}
-
-                    <p class="auth-footer">
-                        Don't have an account? <a href="#" onclick="showTab('signup')">Sign up</a>
-                    </p>
-
-                    <div class="auth-links">
-                        <a href="#"><i class="fas fa-key"></i> Forgot Password?</a>
-                    </div>
-                </div>
-
-                <!-- Signup Form -->
-                <div id="signup" class="auth-form {% if show_signup %}active{% endif %}">
-                    <h2>Create Account</h2>
-                    <form method="POST" action="{{ url_for('auth.signup') }}">
-                        <div class="form-group">
-                            <label for="username">
-                                <i class="fas fa-user"></i> Username
-                            </label>
-                            <input type="text" id="username" name="username" required placeholder="your_username">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="signup-email">
-                                <i class="fas fa-envelope"></i> Email
-                            </label>
-                            <input type="email" id="signup-email" name="email" required placeholder="your@email.com">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="signup-password">
-                                <i class="fas fa-lock"></i> Password
-                            </label>
-                            <div class="password-wrapper">
-                                <input type="password" id="signup-password" name="password" required placeholder="••••••••" minlength="6">
-                                <button type="button" class="password-toggle" onclick="togglePassword('signup-password', this)" aria-label="Toggle password visibility">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="confirm-password">
-                                <i class="fas fa-check-circle"></i> Confirm Password
-                            </label>
-                            <div class="password-wrapper">
-                                <input type="password" id="confirm-password" name="confirm_password" required placeholder="••••••••">
-                                <button type="button" class="password-toggle" onclick="togglePassword('confirm-password', this)" aria-label="Toggle password visibility">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-user-plus"></i> Create Account
-                        </button>
-                    </form>
-
-                    {% if google_oauth_enabled %}
-                    <div class="divider">or</div>
-
-                    <a href="{{ url_for('auth.google_login') }}" class="btn btn-google btn-block" aria-label="Sign up with Google">
-                        <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-                            <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
-                            <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
-                            <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
-                            <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
-                        </svg>
-                        Sign up with Google
-                    </a>
-                    {% endif %}
-
-                    <p class="auth-footer">
-                        Already have an account? <a href="#" onclick="showTab('login')">Login</a>
-                    </p>
+                <div>
+                    <h1>FlightHub</h1>
+                    <p class="subtitle">Secure access to your aviation dashboard</p>
                 </div>
             </div>
 
-            <div class="plane-animation"></div>
-            <div class="plane-animation" style="animation-delay: 5s"></div>
-            <div class="plane-animation" style="animation-delay: 10s"></div>
+            <div id="alert-container"></div>
+
+            <div class="auth-tabs" role="tablist">
+                <button class="auth-tab active" onclick="showTab(event, 'login')" aria-controls="login">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </button>
+                <button class="auth-tab" onclick="showTab(event, 'signup')" aria-controls="signup">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </button>
+            </div>
+
+            <div id="login" class="auth-form active" role="tabpanel">
+                <h2>Welcome Back</h2>
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="email">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('password', this)" aria-label="Toggle password visibility">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                </form>
+
+                <div class="divider">or continue with</div>
+                <button type="button" class="btn btn-google btn-block" onclick="handleGoogleSignIn()" aria-label="Continue with Google">
+                    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+                        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
+                        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
+                        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
+                        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
+                    </svg>
+                    Continue with Google
+                </button>
+
+                <div class="auth-links">
+                    <a href="forgot_password.html"><i class="fas fa-key"></i> Forgot Password?</a>
+                    <span class="divider-text">•</span>
+                    <a href="#" onclick="showTab(event, 'signup')"><i class="fas fa-user-plus"></i> Create account</a>
+                </div>
+            </div>
+
+            <div id="signup" class="auth-form" role="tabpanel">
+                <h2>Create Account</h2>
+                <form id="signup-form" onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fas fa-user"></i> Username
+                        </label>
+                        <input type="text" id="username" name="username" required placeholder="your_username" autocomplete="username">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-email">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input type="email" id="signup-email" name="email" required placeholder="you@example.com" autocomplete="email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-password">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" id="signup-password" name="password" required minlength="6" placeholder="Create a password" autocomplete="new-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('signup-password', this)" aria-label="Toggle password visibility">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">
+                            <i class="fas fa-check-circle"></i> Confirm Password
+                        </label>
+                        <div class="password-wrapper">
+                            <input type="password" id="confirm-password" name="confirm_password" required placeholder="Re-enter password" autocomplete="new-password">
+                            <button type="button" class="password-toggle" onclick="togglePassword('confirm-password', this)" aria-label="Toggle password visibility">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-user-plus"></i> Create Account
+                    </button>
+                </form>
+
+                <div class="divider">or continue with</div>
+                <button type="button" class="btn btn-google btn-block" onclick="handleGoogleSignIn()" aria-label="Sign up with Google">
+                    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+                        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
+                        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
+                        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
+                        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
+                    </svg>
+                    Sign up with Google
+                </button>
+
+                <div class="auth-links single">
+                    <a href="#" onclick="showTab(event, 'login')"><i class="fas fa-arrow-left"></i> Back to login</a>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Footer - Matching about.html -->
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 FlightHub. All rights reserved.</p>
+    <footer class="auth-footer">
+        <p>&copy; 2025 FlightHub. All rights reserved.</p>
             <p>
-                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a> |
-                <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a> |
-                <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
-            </p>
-        </div>
+            <a href="../../templates/about.html"><i class="fas fa-info-circle"></i> About</a>
+            <span>•</span>
+            <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+            <span>•</span>
+            <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+        </p>
     </footer>
 
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <script>
-        function showTab(tabName) {
+        // Authentication state management
+        const API_BASE_URL = window.location.origin; // Adjust if your API is on a different domain
+        
+        // Check if user is already logged in
+        window.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('user');
+            if (user) {
+                window.location.href = '../app/dashboard.html';
+            }
+        });
+
+        function showTab(evt, tabName) {
             // Hide all forms
             document.querySelectorAll('.auth-form').forEach(form => {
                 form.classList.remove('active');
@@ -558,7 +177,10 @@
 
             // Show selected form
             document.getElementById(tabName).classList.add('active');
-            event.target.closest('.auth-tab').classList.add('active');
+            const trigger = evt && evt.target ? evt.target.closest('.auth-tab') : null;
+            if (trigger) {
+                trigger.classList.add('active');
+            }
         }
 
         function togglePassword(inputId, button) {
@@ -575,6 +197,223 @@
                 icon.classList.add('fa-eye');
             }
         }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alert-container');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+            
+            alertContainer.innerHTML = `
+                <div class="alert ${alertClass}">
+                    <i class="fas fa-${icon}"></i>
+                    ${message}
+                </div>
+            `;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alertContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const email = formData.get('email');
+            const password = formData.get('password');
+
+            try {
+                // For now, we'll use localStorage for demo purposes
+                // In production, this would call your backend API
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    localStorage.setItem('token', data.token || 'demo-token');
+                    showAlert('✅ Logged in successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '../app/dashboard.html';
+                    }, 1000);
+                } else {
+                    const error = await response.json();
+                    showAlert('❌ ' + (error.message || 'Invalid email or password'), 'error');
+                }
+            } catch (error) {
+                // Fallback: Use localStorage for demo (remove in production)
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    localStorage.setItem('user', JSON.stringify({ email: user.email, username: user.username }));
+                    showAlert('✅ Logged in successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '../app/dashboard.html';
+                    }, 1000);
+                } else {
+                    showAlert('❌ Invalid email or password', 'error');
+                }
+            }
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const username = formData.get('username');
+            const email = formData.get('email');
+            const password = formData.get('password');
+            const confirmPassword = formData.get('confirm_password');
+
+            if (password !== confirmPassword) {
+                showAlert('❌ Passwords do not match', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showAlert('❌ Password must be at least 6 characters', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                if (response.ok) {
+                    showAlert('✅ Account created successfully! Please login.', 'success');
+                    setTimeout(() => {
+                        showTab(event, 'login');
+                    }, 1500);
+                } else {
+                    const error = await response.json();
+                    showAlert('❌ ' + (error.message || 'Failed to create account'), 'error');
+                }
+            } catch (error) {
+                // Fallback: Use localStorage for demo
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                if (users.find(u => u.email === email)) {
+                    showAlert('❌ Email already registered', 'error');
+                    return;
+                }
+                if (users.find(u => u.username === username)) {
+                    showAlert('❌ Username already taken', 'error');
+                    return;
+                }
+                
+                users.push({ username, email, password });
+                localStorage.setItem('users', JSON.stringify(users));
+                showAlert('✅ Account created successfully! Please login.', 'success');
+                setTimeout(() => {
+                    showTab(event, 'login');
+                }, 1500);
+            }
+        }
+
+        // Google Sign-In using Google Identity Services
+        let googleClientId = null;
+        
+        // Initialize Google Sign-In when the library loads
+        window.addEventListener('load', function() {
+            if (typeof google !== 'undefined' && google.accounts) {
+                // Get Google Client ID from environment or use a placeholder
+                // In production, this should come from your backend or environment variable
+                googleClientId = 'YOUR_GOOGLE_CLIENT_ID'; // Replace with your actual Google Client ID
+                
+                if (googleClientId && googleClientId !== 'YOUR_GOOGLE_CLIENT_ID') {
+                    google.accounts.id.initialize({
+                        client_id: googleClientId,
+                        callback: handleGoogleResponse
+                    });
+                }
+            }
+        });
+
+        function handleGoogleSignIn() {
+            if (!googleClientId || googleClientId === 'YOUR_GOOGLE_CLIENT_ID') {
+                showAlert('❌ Google OAuth is not configured. Please use email/password login.', 'error');
+                return;
+            }
+
+            try {
+                if (typeof google !== 'undefined' && google.accounts) {
+                    // Use One Tap or button flow
+                    google.accounts.oauth2.initTokenClient({
+                        client_id: googleClientId,
+                        scope: 'email profile',
+                        callback: handleGoogleTokenResponse
+                    }).requestAccessToken();
+                } else {
+                    showAlert('❌ Google Sign-In library not loaded. Please refresh the page.', 'error');
+                }
+            } catch (error) {
+                showAlert('❌ Google login failed. Please try again.', 'error');
+            }
+        }
+
+        function handleGoogleResponse(response) {
+            try {
+                // Decode the JWT token
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                
+                // Store user info
+                const user = {
+                    email: payload.email,
+                    username: payload.name || payload.email.split('@')[0],
+                    picture: payload.picture,
+                    googleId: payload.sub
+                };
+                
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('token', response.credential);
+                showAlert('✅ Logged in with Google successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            } catch (error) {
+                showAlert('❌ Failed to process Google login. Please try again.', 'error');
+            }
+        }
+
+        function handleGoogleTokenResponse(tokenResponse) {
+            // Fetch user info from Google
+            fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                headers: {
+                    'Authorization': `Bearer ${tokenResponse.access_token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const user = {
+                    email: data.email,
+                    username: data.name || data.email.split('@')[0],
+                    picture: data.picture,
+                    googleId: data.id
+                };
+                
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('token', tokenResponse.access_token);
+                showAlert('✅ Logged in with Google successfully!', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            })
+            .catch(error => {
+                showAlert('❌ Google login failed. Please try again.', 'error');
+            });
+        }
     </script>
 </body>
 </html>
+

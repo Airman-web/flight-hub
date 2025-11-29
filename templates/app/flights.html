@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flight Search - FlightHub</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -13,15 +13,15 @@
         <div class="nav-container">
             <div class="nav-brand">
                 <i class="fas fa-plane-departure"></i>
-                <a href="{{ url_for('dashboard') }}" style="color: inherit; text-decoration: none;">FlightHub</a>
+                <a href="dashboard.html" style="color: inherit; text-decoration: none;">FlightHub</a>
             </div>
             <div class="nav-links">
-                <a href="{{ url_for('dashboard') }}"><i class="fas fa-th-large"></i> Dashboard</a>
-                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
-                <a href="{{ url_for('auth.profile') }}" class="user-link">
-                    <i class="fas fa-user-circle"></i> {{ user.username }}
+                <a href="dashboard.html"><i class="fas fa-th-large"></i> Dashboard</a>
+                <a href="../about.html"><i class="fas fa-info-circle"></i> About</a>
+                <a href="../auth/profile.html" class="user-link">
+                    <i class="fas fa-user-circle"></i> <span id="username-display">User</span>
                 </a>
-                <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                <a href="#" onclick="handleLogout()" class="btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
@@ -138,7 +138,7 @@
     </footer>
 
     <style>
-        /* ALU Colors */
+        /* ALU Colors - Solid Colors Only */
         body {
             background: #FF6B35;
         }
@@ -166,7 +166,6 @@
             gap: 10px;
             font-size: 1.5em;
             font-weight: bold;
-            background: #FF6B35;
             color: #FF6B35;
             text-decoration: none;
         }
@@ -210,7 +209,6 @@
         }
 
         .header h1 {
-            background: #FF6B35;
             color: #FF6B35;
         }
 
@@ -575,7 +573,26 @@
     </style>
 
     <script>
+        const API_BASE_URL = window.location.origin;
         let flightsData = [];
+
+        // Check authentication
+        window.addEventListener('DOMContentLoaded', function() {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = '../auth/login.html';
+                return;
+            }
+            
+            const userData = JSON.parse(user);
+            document.getElementById('username-display').textContent = userData.username || 'User';
+        });
+
+        function handleLogout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '../auth/login.html';
+        }
 
         function showLoading(show) {
             document.getElementById('loading').style.display = show ? 'flex' : 'none';
@@ -590,7 +607,7 @@
             const airlineCode = document.getElementById('airline-code').value.trim();
             const flightStatus = document.getElementById('flight-status').value;
 
-            let url = '/api/flights?';
+            let url = `${API_BASE_URL}/api/flights?`;
 
             if (flightNumber) url += `flight_iata=${flightNumber}&`;
             if (depAirport) url += `dep_iata=${depAirport}&`;
@@ -599,7 +616,12 @@
             if (flightStatus) url += `flight_status=${flightStatus}&`;
 
             try {
-                const response = await fetch(url);
+                const token = localStorage.getItem('token');
+                const response = await fetch(url, {
+                    headers: {
+                        'Authorization': `Bearer ${token || ''}`
+                    }
+                });
                 const data = await response.json();
 
                 if (data.error) {
