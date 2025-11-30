@@ -44,7 +44,7 @@
             color: #2c3e50;
             text-decoration: none;
         }
-        
+
         .nav-brand i {
             color: #3498db;
         }
@@ -285,9 +285,9 @@
                 <span>FlightHub</span>
             </div>
             <div class="nav-links">
-                <a href="../about.html"><i class="fas fa-info-circle"></i> About</a>
+                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
                 <a href="../auth/profile.html#contact"><i class="fas fa-envelope"></i> Contact</a>
-                <a href="../auth/profile.html" class="user-link">
+                <a href="/auth/profile" class="user-link">
                     <i class="fas fa-user-circle"></i> <span id="username-display">User</span>
                 </a>
                 <a href="#" onclick="handleLogout()" class="btn-logout">
@@ -312,7 +312,7 @@
         <!-- Feature Grid -->
         <section id="features" class="features-section">
             <h2><i class="fas fa-star"></i> Core Features</h2>
-            
+
             <div class="feature-grid">
                 <!-- Flights Feature -->
                 <a href="flights.html" class="feature-card" style="text-decoration: none; color: inherit;">
@@ -439,9 +439,9 @@
         <div class="container">
             <p><i class="fas fa-plane"></i> FlightHub - Aviation Intelligence Dashboard</p>
             <p>
-                Powered by 
-                <a href="https://aviationstack.com" target="_blank">AviationStack</a>, 
-                <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>, 
+                Powered by
+                <a href="https://aviationstack.com" target="_blank">AviationStack</a>,
+                <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>,
                 & <a href="https://opensky-network.org" target="_blank">OpenSky Network</a>
             </p>
             <p>&copy; 2025 FlightHub. All rights reserved.</p>
@@ -452,25 +452,32 @@
         const API_BASE_URL = window.location.origin;
 
         // Check authentication
-        window.addEventListener('DOMContentLoaded', function() {
-            const user = localStorage.getItem('user');
-            if (!user) {
-                window.location.href = '../auth/login.html';
-                return;
+        window.addEventListener('DOMContentLoaded', async function () {
+            // Check authentication with Flask backend
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/user`);
+                if (!response.ok) {
+                    window.location.href = '/auth/login';
+                    return;
+                }
+                const user = await response.json();
+                const username = user.username || 'User';
+                document.getElementById('username-display').textContent = username;
+                document.getElementById('welcome-username').textContent = username;
+
+                loadCacheInfo();
+            } catch (error) {
+                window.location.href = '/auth/login';
             }
-            
-            const userData = JSON.parse(user);
-            const username = userData.username || 'User';
-            document.getElementById('username-display').textContent = username;
-            document.getElementById('welcome-username').textContent = username;
-            
-            loadCacheInfo();
         });
 
-        function handleLogout() {
-            localStorage.removeItem('user');
-            localStorage.removeItem('token');
-            window.location.href = '../auth/login.html';
+        async function handleLogout() {
+            try {
+                await fetch(`${API_BASE_URL}/auth/logout`);
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+            window.location.href = '/auth/login';
         }
 
         function showHistory() {
@@ -487,13 +494,13 @@
                     }
                 });
                 const data = await response.json();
-                
+
                 document.getElementById('cache-info').innerHTML = `
                     <p><i class="fas fa-chart-bar"></i> <strong>Cached Items:</strong> ${data.total_cached_items || 0}</p>
                     <p><i class="fas fa-sync-alt"></i> <strong>API Calls Made:</strong> ${data.api_calls_made || 0}</p>
                     <p><i class="fas fa-bolt"></i> <strong>API Savings:</strong> ~${(90 * (data.total_cached_items || 0)).toFixed(0)}% reduction in requests</p>
                 `;
-                
+
                 document.getElementById('cache-items').textContent = data.total_cached_items || 0;
             } catch (error) {
                 console.error('Failed to load cache info:', error);
@@ -506,7 +513,7 @@
             if (confirm('Are you sure you want to clear the cache?')) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await fetch(`${API_BASE_URL}/api/cache/clear`, { 
+                    const response = await fetch(`${API_BASE_URL}/api/cache/clear`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token || ''}`

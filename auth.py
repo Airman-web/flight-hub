@@ -140,8 +140,15 @@ def logout():
 @auth_bp.route('/google/login')
 def google_login():
     """Start Google OAuth flow"""
+    print("=" * 60)
+    print("🔍 Google Login Route Called")
+    print(f"GOOGLE_CLIENT_ID exists: {bool(GOOGLE_CLIENT_ID)}")
+    print(f"GOOGLE_CLIENT_SECRET exists: {bool(GOOGLE_CLIENT_SECRET)}")
+    print("=" * 60)
+    
     # Check if Google OAuth is configured
     if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET:
+        print("❌ Missing Google OAuth credentials")
         flash('❌ Google OAuth is not configured. Please use email/password login.', 'error')
         return redirect(url_for('auth.login'))
     
@@ -149,9 +156,16 @@ def google_login():
         google_config = requests.get(GOOGLE_DISCOVERY_URL).json()
         authorization_endpoint = google_config["authorization_endpoint"]
         
-        # Dynamic redirect URI based on current request
-        redirect_uri = url_for('auth.google_callback', _external=True, _scheme='https')
-
+        # Determine redirect URI based on environment
+        if request.host.startswith('localhost') or request.host.startswith('127.0.0.1'):
+            # Local development
+            redirect_uri = url_for('auth.google_callback', _external=True, _scheme='http')
+        else:
+            # Production (atigbi.tech)
+            redirect_uri = url_for('auth.google_callback', _external=True, _scheme='https')
+        
+        print(f"📍 Redirect URI: {redirect_uri}")
+        
         request_uri = (
             f"{authorization_endpoint}"
             f"?client_id={GOOGLE_CLIENT_ID}"
@@ -161,12 +175,17 @@ def google_login():
             f"&prompt=select_account"
             f"&access_type=offline"
         )
-
+        
+        print(f"🔗 Redirecting to Google...")
         return redirect(request_uri)
+        
     except Exception as e:
-        print(f"Google OAuth Error: {str(e)}")
+        print(f"❌ Google OAuth Error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         flash('❌ Google login is currently unavailable. Please use email/password login.', 'error')
         return redirect(url_for('auth.login'))
+
 
 @auth_bp.route('/google/callback')
 def google_callback():
@@ -202,8 +221,13 @@ def google_callback():
         google_config = requests.get(GOOGLE_DISCOVERY_URL).json()
         token_endpoint = google_config["token_endpoint"]
         
-        # Dynamic redirect URI
-        redirect_uri = url_for('auth.google_callback', _external=True, _scheme='https')
+        # Determine redirect URI based on environment (same logic as in google_login)
+        if request.host.startswith('localhost') or request.host.startswith('127.0.0.1'):
+            redirect_uri = url_for('auth.google_callback', _external=True, _scheme='http')
+        else:
+            redirect_uri = url_for('auth.google_callback', _external=True, _scheme='https')
+        
+        print(f"📍 Using redirect URI for token: {redirect_uri}")
         
         token_data = {
             'code': code,
@@ -220,6 +244,7 @@ def google_callback():
             error_data = response.json() if response.content else {}
             error_msg = error_data.get('error_description', error_data.get('error', 'Token request failed'))
             print(f"Google OAuth Token Error: {error_msg}")
+            print(f"Response: {response.text}")
             flash('❌ Google login failed. Please use email/password login.', 'error')
             return redirect(url_for('auth.login'))
         
@@ -250,6 +275,7 @@ def google_callback():
             return redirect(url_for('auth.login'))
         
         userinfo = userinfo_response.json()
+        print(f"✓ Got user info for: {userinfo.get('email')}")
         
         # Check if user exists
         user = User.query.filter_by(google_id=userinfo['sub']).first()
@@ -259,11 +285,13 @@ def google_callback():
             user = User.query.filter_by(email=userinfo['email']).first()
             if user:
                 # Link Google account to existing user
+                print(f"✓ Linking Google account to existing user: {user.email}")
                 user.google_id = userinfo['sub']
                 user.profile_picture = userinfo.get('picture')
                 db.session.commit()
             else:
                 # Create new user from Google data
+                print(f"✓ Creating new user from Google: {userinfo['email']}")
                 user = User(
                     email=userinfo['email'],
                     username=userinfo.get('name', userinfo['email'].split('@')[0]),
@@ -280,11 +308,12 @@ def google_callback():
         
         # Login user
         login_user(user)
+        print(f"✓ User logged in: {user.email}")
         flash(f'✅ Welcome, {user.username}!', 'success')
         return redirect(url_for('dashboard'))
     
     except Exception as e:
-        print(f"Google OAuth Error: {str(e)}")
+        print(f"❌ Google OAuth Error: {str(e)}")
         import traceback
         traceback.print_exc()
         flash('❌ Google login failed. Please use email/password login.', 'error')
@@ -295,9 +324,3 @@ def google_callback():
 def profile():
     """User profile page"""
     return render_template('auth/profile.html', user=current_user)
-
-@auth_bp.route('/api/user')
-@login_required
-def get_user_data():
-    """Get current user data as JSON"""
-    return jsonify(current_user.to_dict())

@@ -546,7 +546,7 @@ def clear_search_history():
     return jsonify({'message': 'History cleared'})
 
 # ===== CACHE ENDPOINTS =====
-
+            
 @app.route('/api/cache/info')
 @login_required
 def cache_info():
@@ -595,6 +595,12 @@ def update_preferences():
 
     return jsonify({'message': 'Preferences updated'})
 
+@app.route('/api/user')
+@login_required
+def get_user_data():
+    """Get current user data as JSON"""
+    return jsonify(current_user.to_dict())
+
 # ===== ERROR HANDLERS =====
 
 @app.errorhandler(404)
@@ -604,7 +610,6 @@ def not_found(error):
 @app.errorhandler(500)
 def internal_error(error):
     return jsonify({'error': 'Internal server error'}), 500
-
 
 # ===== PAGE ROUTES =====
 
@@ -631,7 +636,6 @@ def airlines_page():
 def airports_page():
     """Airports page"""
     return render_template('app/airports.html', user=current_user)
-
 
 # ===== STARTUP =====
 

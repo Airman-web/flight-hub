@@ -1,140 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - FlightHub</title>
-    <link rel="stylesheet" href="../../static/css/auth.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body class="auth-body">
-    <div class="auth-page">
-        <div class="auth-card" role="main">
-            <div class="auth-header">
-                <div class="logo-mark">
-                    <i class="fas fa-plane-departure"></i>
-                </div>
-                <div>
-                    <h1>FlightHub</h1>
-                    <p class="subtitle">Secure access to your aviation dashboard</p>
-                </div>
-            </div>
-
-            <div id="alert-container"></div>
-
-            <div class="auth-tabs" role="tablist">
-                <button class="auth-tab active" onclick="showTab(event, 'login')" aria-controls="login">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
-                <button class="auth-tab" onclick="showTab(event, 'signup')" aria-controls="signup">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </button>
-            </div>
-
-            <div id="login" class="auth-form active" role="tabpanel">
-                <h2>Welcome Back</h2>
-                <form id="login-form" onsubmit="handleLogin(event)">
-                    <div class="form-group">
-                        <label for="email">
-                            <i class="fas fa-envelope"></i> Email
-                        </label>
-                        <input type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Login - FlightHub</title>
+        <link rel="stylesheet" href="../../static/css/auth.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    </head>
+    <body class="auth-body">
+        <div class="auth-page">
+            <div class="auth-card" role="main">
+                <div class="auth-header">
+                    <div class="logo-mark">
+                        <i class="fas fa-plane-departure"></i>
                     </div>
-
-                    <div class="form-group">
-                        <label for="password">
-                            <i class="fas fa-lock"></i> Password
-                        </label>
-                        <div class="password-wrapper">
-                            <input type="password" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
-                            <button type="button" class="password-toggle" onclick="togglePassword('password', this)" aria-label="Toggle password visibility">
-                                <i class="fa fa-eye" aria-hidden="true"></i>
-                            </button>
-                        </div>
+                    <div>
+                        <h1>FlightHub</h1>
+                        <p class="subtitle">Secure access to your aviation dashboard</p>
                     </div>
+                </div>
 
-                    <button type="submit" class="btn btn-primary btn-block">
+                <div id="alert-container"></div>
+
+                <div class="auth-tabs" role="tablist">
+                    <button class="auth-tab active" onclick="showTab(event, 'login')" aria-controls="login">
                         <i class="fas fa-sign-in-alt"></i> Login
                     </button>
-                </form>
+                    <button class="auth-tab" onclick="showTab(event, 'signup')" aria-controls="signup">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </button>
+                </div>
 
-                <div class="divider">or continue with</div>
-<a href="/auth/google/login" class="btn btn-google btn-block" aria-label="Continue with Google">
-    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
-        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
-        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
-        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
-    </svg>
-    Continue with Google
-</a>
-<div class="auth-links">
-    <a href="forgot_password.html"><i class="fas fa-key"></i> Forgot Password?</a>
-    <span class="divider-text">•</span>
-    <a href="#" onclick="showTab(event, 'signup')"><i class="fas fa-user-plus"></i> Create account</a>
-</div>
-</div>
+                <div id="login" class="auth-form active" role="tabpanel">
+                    <h2>Welcome Back</h2>
+                    <form id="login-form" method="POST" action="/auth/login">
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" id="email" name="email" required placeholder="you@example.com" autocomplete="email">
+                        </div>
 
-<div id="signup" class="auth-form" role="tabpanel">
-<h2>Create Account</h2>
-<form id="signup-form" onsubmit="handleSignup(event)">
-    <div class="form-group">
-        <label for="username">
-            <i class="fas fa-user"></i> Username
-        </label>
-        <input type="text" id="username" name="username" required placeholder="your_username" autocomplete="username">
-    </div>
+                        <div class="form-group">
+                            <label for="password">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <div class="password-wrapper">
+                                <input type="password" id="password" name="password" required placeholder="••••••••" autocomplete="current-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('password', this)" aria-label="Toggle password visibility">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
 
-    <div class="form-group">
-        <label for="signup-email">
-            <i class="fas fa-envelope"></i> Email
-        </label>
-        <input type="email" id="signup-email" name="email" required placeholder="you@example.com" autocomplete="email">
-    </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </button>
+                    </form>
 
-    <div class="form-group">
-        <label for="signup-password">
-            <i class="fas fa-lock"></i> Password
-        </label>
-        <div class="password-wrapper">
-            <input type="password" id="signup-password" name="password" required minlength="6" placeholder="Create a password" autocomplete="new-password">
-            <button type="button" class="password-toggle" onclick="togglePassword('signup-password', this)" aria-label="Toggle password visibility">
-                <i class="fa fa-eye" aria-hidden="true"></i>
-            </button>
+                    <div class="divider">or continue with</div>
+                    <a href="/auth/google/login" class="btn btn-google btn-block" aria-label="Continue with Google">
+                        <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+                            <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
+                            <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
+                            <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
+                            <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
+                        </svg>
+                        Continue with Google
+                    </a>
+
+                    <div class="auth-links">
+                        <a href="forgot_password.html"><i class="fas fa-key"></i> Forgot Password?</a>
+                        <span class="divider-text">•</span>
+                        <a href="#" onclick="showTab(event, 'signup')"><i class="fas fa-user-plus"></i> Create account</a>
+                    </div>
+                </div>
+
+                <div id="signup" class="auth-form" role="tabpanel">
+                    <h2>Create Account</h2>
+                    <form id="signup-form" method="POST" action="/auth/signup">
+                        <div class="form-group">
+                            <label for="username">
+                                <i class="fas fa-user"></i> Username
+                            </label>
+                            <input type="text" id="username" name="username" required placeholder="your_username" autocomplete="username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup-email">
+                                <i class="fas fa-envelope"></i> Email
+                            </label>
+                            <input type="email" id="signup-email" name="email" required placeholder="you@example.com" autocomplete="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="signup-password">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <div class="password-wrapper">
+                                <input type="password" id="signup-password" name="password" required minlength="6" placeholder="Create a password" autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('signup-password', this)" aria-label="Toggle password visibility">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm-password">
+                                <i class="fas fa-check-circle"></i> Confirm Password
+                            </label>
+                            <div class="password-wrapper">
+                                <input type="password" id="confirm-password" name="confirm_password" required placeholder="Re-enter password" autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('confirm-password', this)" aria-label="Toggle password visibility">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </form>
+
+                    <div class="divider">or continue with</div>
+                    <a href="/auth/google/login" class="btn btn-google btn-block" aria-label="Sign up with Google">
+                        <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
+                            <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
+                            <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
+                            <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
+                            <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
+                        </svg>
+                        Sign up with Google
+                    </a>
+
+                    <div class="auth-links single">
+                        <a href="#" onclick="showTab(event, 'login')"><i class="fas fa-arrow-left"></i> Back to login</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-
-    <div class="form-group">
-        <label for="confirm-password">
-            <i class="fas fa-check-circle"></i> Confirm Password
-        </label>
-        <div class="password-wrapper">
-            <input type="password" id="confirm-password" name="confirm_password" required placeholder="Re-enter password" autocomplete="new-password">
-            <button type="button" class="password-toggle" onclick="togglePassword('confirm-password', this)" aria-label="Toggle password visibility">
-                <i class="fa fa-eye" aria-hidden="true"></i>
-            </button>
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-primary btn-block">
-        <i class="fas fa-user-plus"></i> Create Account
-    </button>
-</form>
-
-<div class="divider">or continue with</div>
-<button type="button" class="btn btn-google btn-block" onclick="handleGoogleSignIn()" aria-label="Sign up with Google">
-    <svg width="20" height="20" viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" focusable="false" aria-hidden="true">
-        <path fill="#4285F4" d="M23 11c3.6 0 6.1 1.6 7.5 2.9L34.8 10C31.7 7.4 27.7 6 23 6 14.1 6 6.9 11.8 4.4 19.4L10 22.8C11.9 16.9 16.8 11 23 11z"/>
-        <path fill="#34A853" d="M42 23.5c0-1.5-.1-2.6-.4-3.8H23v7.2h10.9c-.5 2.9-2.1 5.3-4.6 6.9l7 5.4C38.9 36.3 42 30.5 42 23.5z"/>
-        <path fill="#FBBC05" d="M10 27.2C9.4 25.6 9.1 24 9.1 22.4S9.4 19.2 10 17.6L4.4 14.2C3 17.5 2.3 20.9 2.3 24.4s.6 6.9 2.1 10.2L10 27.2z"/>
-        <path fill="#EA4335" d="M23 42c4.7 0 8.7-1.4 11.8-3.8l-7-5.4c-2 1.4-4.6 2.2-7 2.2-6.2 0-11.1-5.9-12.6-11.8L4.4 27A17 17 0 0023 42z"/>
-    </svg>
-    Sign up with Google
-</button>
-
-<div class="auth-links single">
-    <a href="#" onclick="showTab(event, 'login')"><i class="fas fa-arrow-left"></i> Back to login</a>
-</div>
-</div>
+    </body>
 </html>
-
