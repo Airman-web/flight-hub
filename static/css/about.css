@@ -52,7 +52,7 @@ body {
 .nav-brand {
     font-size: 1.5em;
     font-weight: bold;
-    background: #FF6B35;
+    background: white;
     color: #FF6B35;
     text-decoration: none;
     transition: transform 0.3s ease;

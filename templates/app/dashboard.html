@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard - FlightHub</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
-        /* ALU Color Override - Solid Colors Only */
+        /* ALU Color Theme - Consistent with About Page */
         :root {
-            --primary-color: #FF6B35;
-            --secondary-color: #5B2C6F;
+            --alu-primary: #FF6B35;
+            --alu-secondary: #5B2C6F;
+            --alu-primary-shadow: rgba(255, 107, 53, 0.4);
         }
 
         body {
             background: #f5f7fa;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Navbar */
+        /* Navbar - Clean and Simple */
         .navbar {
             background: white;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -40,19 +43,13 @@
             align-items: center;
             gap: 10px;
             font-size: 1.4em;
-            font-weight: 600;
-            color: #2c3e50;
+            font-weight: bold;
+            color: var(--alu-primary);
             text-decoration: none;
         }
 
         .nav-brand i {
-            color: #3498db;
-        }
-
-        .nav-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
+            color: var(--alu-primary);
         }
 
         .nav-links {
@@ -72,7 +69,7 @@
         }
 
         .nav-links a:hover {
-            color: #3498db;
+            color: var(--alu-primary);
         }
 
         .btn-logout {
@@ -98,11 +95,28 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--alu-primary);
         }
 
-        /* Header */
+        /* Header - Solid ALU Orange */
+        .header {
+            background: var(--alu-primary);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
         .header h1 {
-            color: #FF6B35;
+            color: white !important;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            color: white !important;
+            font-size: 1.2em;
         }
 
         /* Sections */
@@ -116,6 +130,19 @@
             font-size: 2em;
         }
 
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
         .feature-card {
             background: white;
             padding: 30px;
@@ -126,25 +153,27 @@
             text-align: center;
             border: 1px solid #e9ecef;
             position: relative;
+            text-decoration: none;
+            color: inherit;
         }
 
         .feature-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-            border-color: #3498db;
+            border-color: var(--alu-primary);
         }
 
         .feature-icon {
             font-size: 3em;
             margin-bottom: 15px;
-            color: #3498db;
+            color: var(--alu-primary);
         }
 
         .feature-arrow {
             position: absolute;
             right: 20px;
             top: 20px;
-            color: #3498db;
+            color: var(--alu-primary);
             font-size: 1.5em;
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -155,6 +184,13 @@
         }
 
         /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmin(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
         .stat-card {
             background: white;
             padding: 25px;
@@ -166,13 +202,13 @@
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+            box-shadow: 0 8px 25px var(--alu-primary-shadow);
         }
 
         .stat-number {
             font-size: 3em;
             font-weight: bold;
-            color: #FF6B35;
+            color: var(--alu-primary);
         }
 
         .stat-label {
@@ -181,7 +217,14 @@
             margin-top: 10px;
         }
 
-        /* Action Buttons */
+        /* Actions */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
         .action-btn {
             background: white;
             border: 1px solid #dee2e6;
@@ -198,11 +241,11 @@
         }
 
         .action-btn:hover {
-            background: #3498db;
+            background: var(--alu-primary);
             color: white;
-            border-color: #3498db;
+            border-color: var(--alu-primary);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+            box-shadow: 0 4px 8px var(--alu-primary-shadow);
         }
 
         .action-icon {
@@ -215,6 +258,7 @@
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 50px;
         }
 
         .btn-secondary {
@@ -229,28 +273,61 @@
         }
 
         .btn-secondary:hover {
-            background: #3498db;
+            background: var(--alu-primary);
             color: white;
-            border-color: #3498db;
+            border-color: var(--alu-primary);
         }
 
-        .footer a {
-            color: #FF6B35;
+        /* History Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
-        .footer a:hover {
-            color: #5B2C6F;
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        /* Footer */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .history-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--alu-primary);
+        }
+
+        /* Footer - Matching About Page */
         .footer {
-            background: #333;
+            background: #2c3e50;
             color: white;
             text-align: center;
-            padding: 10px 0px;
-            position: relative;
-            min-height: 0dvh;
-            grid-template-rows: auto 1fr auto;
+            padding: 30px 0;
+            margin-top: 50px;
         }
 
         .footer p {
@@ -259,38 +336,36 @@
         }
 
         .footer a {
-            color: #FF6B35;
+            color: var(--alu-primary);
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
         }
 
         .footer a:hover {
-            color: #5B2C6F;
+            color: var(--alu-secondary);
             text-decoration: underline;
         }
 
         .footer i {
             margin-right: 5px;
-            color: #FF6B35;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar - Clean, No Feature Links -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-brand">
+            <a href="{{ url_for('dashboard') }}" class="nav-brand">
                 <i class="fas fa-plane-departure"></i>
                 <span>FlightHub</span>
-            </div>
+            </a>
             <div class="nav-links">
-                <a href="/about"><i class="fas fa-info-circle"></i> About</a>
-                <a href="../auth/profile.html#contact"><i class="fas fa-envelope"></i> Contact</a>
-                <a href="/auth/profile" class="user-link">
-                    <i class="fas fa-user-circle"></i> <span id="username-display">User</span>
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
+                <a href="{{ url_for('auth.profile') }}" class="user-link">
+                    <i class="fas fa-user-circle"></i> {{ user.username }}
                 </a>
-                <a href="#" onclick="handleLogout()" class="btn-logout">
+                <a href="{{ url_for('auth.logout') }}" class="btn-logout">
                     <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
@@ -301,7 +376,7 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <h1>Welcome, <span id="welcome-username">User</span>!</h1>
+                <h1>Welcome, {{ user.username }}!</h1>
                 <p>Choose what you'd like to explore</p>
             </div>
         </div>
@@ -315,7 +390,7 @@
 
             <div class="feature-grid">
                 <!-- Flights Feature -->
-                <a href="flights.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="{{ url_for('flights_page') }}" class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-plane-departure"></i>
                     </div>
@@ -325,7 +400,7 @@
                 </a>
 
                 <!-- Live Aircraft Feature -->
-                <a href="aircraft_map.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="{{ url_for('aircraft_map') }}" class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-map-marked-alt"></i>
                     </div>
@@ -335,7 +410,7 @@
                 </a>
 
                 <!-- Weather Feature -->
-                <a href="weather.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="{{ url_for('weather_page') }}" class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-cloud-sun"></i>
                     </div>
@@ -345,7 +420,7 @@
                 </a>
 
                 <!-- Airports Feature -->
-                <a href="airports.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="{{ url_for('airports_page') }}" class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-building"></i>
                     </div>
@@ -355,7 +430,7 @@
                 </a>
 
                 <!-- Airlines Feature -->
-                <a href="airlines.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="{{ url_for('airlines_page') }}" class="feature-card">
                     <div class="feature-icon">
                         <i class="fas fa-plane"></i>
                     </div>
@@ -365,7 +440,7 @@
                 </a>
 
                 <!-- History Feature -->
-                <a href="#" class="feature-card" style="text-decoration: none; color: inherit;" onclick="showHistory()">
+                <a href="#" class="feature-card" onclick="showHistory(); return false;">
                     <div class="feature-icon">
                         <i class="fas fa-history"></i>
                     </div>
@@ -403,19 +478,19 @@
         <section class="quick-actions">
             <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
             <div class="actions-grid">
-                <button class="action-btn" onclick="window.location.href='flights.html'">
+                <button class="action-btn" onclick="window.location.href='{{ url_for('flights_page') }}'">
                     <span class="action-icon"><i class="fas fa-search"></i></span>
                     <span>Search Flights</span>
                 </button>
-                <button class="action-btn" onclick="window.location.href='weather.html'">
+                <button class="action-btn" onclick="window.location.href='{{ url_for('weather_page') }}'">
                     <span class="action-icon"><i class="fas fa-temperature-high"></i></span>
                     <span>Check Weather</span>
                 </button>
-                <button class="action-btn" onclick="window.location.href='aircraft_map.html'">
+                <button class="action-btn" onclick="window.location.href='{{ url_for('aircraft_map') }}'">
                     <span class="action-icon"><i class="fas fa-globe"></i></span>
                     <span>View Live Map</span>
                 </button>
-                <button class="action-btn" onclick="window.location.href='airlines.html'">
+                <button class="action-btn" onclick="window.location.href='{{ url_for('airlines_page') }}'">
                     <span class="action-icon"><i class="fas fa-list"></i></span>
                     <span>Browse Airlines</span>
                 </button>
@@ -427,84 +502,81 @@
             <h2><i class="fas fa-database"></i> Cache & Performance</h2>
             <div class="info-card">
                 <div id="cache-info">Loading cache information...</div>
-                <button class="btn btn-secondary" onclick="clearCache()" style="margin-top: 15px;">
+                <button class="btn-secondary" onclick="clearCache()" style="margin-top: 15px;">
                     <i class="fas fa-trash-alt"></i> Clear Cache
                 </button>
             </div>
         </section>
     </div>
 
-    <!-- Footer -->
+    <!-- History Modal -->
+    <div id="historyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeHistory()">&times;</span>
+            <h2><i class="fas fa-history"></i> Search History</h2>
+            <div id="history-content">
+                <p>Loading...</p>
+            </div>
+            <button class="btn-secondary" onclick="clearHistory()" style="margin-top: 20px;">
+                <i class="fas fa-trash-alt"></i> Clear All History
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer - Matching About Page -->
     <footer class="footer">
         <div class="container">
-            <p><i class="fas fa-plane"></i> FlightHub - Aviation Intelligence Dashboard</p>
+            <p><i class="fas fa-plane-departure"></i> FlightHub - Aviation Intelligence Platform</p>
             <p>
-                Powered by
-                <a href="https://aviationstack.com" target="_blank">AviationStack</a>,
-                <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>,
+                Powered by 
+                <a href="https://aviationstack.com" target="_blank">AviationStack</a>, 
+                <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>, 
                 & <a href="https://opensky-network.org" target="_blank">OpenSky Network</a>
             </p>
             <p>&copy; 2025 FlightHub. All rights reserved.</p>
+            <p>
+                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a> |
+                <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a> |
+                <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+            </p>
         </div>
     </footer>
 
     <script>
-        const API_BASE_URL = window.location.origin;
-
-        // Check authentication
-        window.addEventListener('DOMContentLoaded', async function () {
-            // Check authentication with Flask backend
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/user`);
-                if (!response.ok) {
-                    window.location.href = '/auth/login';
-                    return;
-                }
-                const user = await response.json();
-                const username = user.username || 'User';
-                document.getElementById('username-display').textContent = username;
-                document.getElementById('welcome-username').textContent = username;
-
-                loadCacheInfo();
-            } catch (error) {
-                window.location.href = '/auth/login';
-            }
+        // Load cache info on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            loadCacheInfo();
+            loadAircraftCount();
         });
-
-        async function handleLogout() {
-            try {
-                await fetch(`${API_BASE_URL}/auth/logout`);
-            } catch (error) {
-                console.error('Logout error:', error);
-            }
-            window.location.href = '/auth/login';
-        }
-
-        function showHistory() {
-            alert('Search history feature - Coming soon!');
-        }
 
         // Load cache info
         async function loadCacheInfo() {
             try {
-                const token = localStorage.getItem('token');
-                const response = await fetch(`${API_BASE_URL}/api/cache/info`, {
-                    headers: {
-                        'Authorization': `Bearer ${token || ''}`
-                    }
-                });
+                const response = await fetch('/api/cache/info');
+                if (!response.ok) return;
+                
                 const data = await response.json();
-
                 document.getElementById('cache-info').innerHTML = `
                     <p><i class="fas fa-chart-bar"></i> <strong>Cached Items:</strong> ${data.total_cached_items || 0}</p>
                     <p><i class="fas fa-sync-alt"></i> <strong>API Calls Made:</strong> ${data.api_calls_made || 0}</p>
                     <p><i class="fas fa-bolt"></i> <strong>API Savings:</strong> ~${(90 * (data.total_cached_items || 0)).toFixed(0)}% reduction in requests</p>
                 `;
-
                 document.getElementById('cache-items').textContent = data.total_cached_items || 0;
             } catch (error) {
-                console.error('Failed to load cache info:', error);
                 document.getElementById('cache-info').innerHTML = '<p>Cache information unavailable</p>';
+            }
+        }
+
+        // Load aircraft count
+        async function loadAircraftCount() {
+            try {
+                const response = await fetch('/api/aircraft/live');
+                const data = await response.json();
+                if (data.success && data.count) {
+                    document.getElementById('aircraft-count').textContent = data.count.toLocaleString();
+                }
+            } catch (error) {
+                console.log('Could not load aircraft count');
             }
         }
 
@@ -512,19 +584,79 @@
         async function clearCache() {
             if (confirm('Are you sure you want to clear the cache?')) {
                 try {
-                    const token = localStorage.getItem('token');
-                    const response = await fetch(`${API_BASE_URL}/api/cache/clear`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${token || ''}`
-                        }
-                    });
-                    const data = await response.json();
-                    alert('✅ Cache cleared successfully!');
-                    loadCacheInfo();
+                    const response = await fetch('/api/cache/clear', { method: 'POST' });
+                    if (response.ok) {
+                        alert('✅ Cache cleared successfully!');
+                        loadCacheInfo();
+                    } else {
+                        alert('❌ Failed to clear cache');
+                    }
                 } catch (error) {
                     alert('❌ Failed to clear cache');
                 }
+            }
+        }
+
+        // Show search history
+        async function showHistory() {
+            document.getElementById('historyModal').style.display = 'block';
+            document.getElementById('history-content').innerHTML = '<p>Loading...</p>';
+            
+            try {
+                const response = await fetch('/api/history');
+                if (!response.ok) throw new Error('Failed to load history');
+                
+                const history = await response.json();
+                
+                if (history.length === 0) {
+                    document.getElementById('history-content').innerHTML = '<p>No search history yet.</p>';
+                    return;
+                }
+                
+                let html = '';
+                history.forEach(item => {
+                    const date = new Date(item.timestamp).toLocaleString();
+                    html += `
+                        <div class="history-item">
+                            <strong>${item.search_query}</strong><br>
+                            <small><i class="fas fa-clock"></i> ${date}</small>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('history-content').innerHTML = html;
+            } catch (error) {
+                document.getElementById('history-content').innerHTML = '<p>Failed to load history.</p>';
+            }
+        }
+
+        // Close history modal
+        function closeHistory() {
+            document.getElementById('historyModal').style.display = 'none';
+        }
+
+        // Clear search history
+        async function clearHistory() {
+            if (confirm('Are you sure you want to clear all search history?')) {
+                try {
+                    const response = await fetch('/api/history', { method: 'DELETE' });
+                    if (response.ok) {
+                        alert('✅ History cleared successfully!');
+                        closeHistory();
+                    } else {
+                        alert('❌ Failed to clear history');
+                    }
+                } catch (error) {
+                    alert('❌ Failed to clear history');
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('historyModal');
+            if (event.target == modal) {
+                closeHistory();
             }
         }
     </script>

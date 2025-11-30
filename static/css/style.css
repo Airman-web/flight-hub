@@ -1147,7 +1147,7 @@ select:focus + label {
 
 /* Footer with Slide Up */
 .footer {
-    position: fixed;
+    position: bottom;
     bottom: 0;
     left: 0;
     right: 0;
