@@ -324,3 +324,30 @@ def google_callback():
 def profile():
     """User profile page"""
     return render_template('auth/profile.html', user=current_user)
+
+@auth_bp.route('/delete-account', methods=['POST'])
+@login_required
+def delete_account():
+    """Delete user account"""
+    try:
+        user_id = current_user.id
+        user_email = current_user.email
+        
+        # Log out the user first
+        logout_user()
+        
+        # Delete the user from database
+        user = User.query.get(user_id)
+        if user:
+            db.session.delete(user)
+            db.session.commit()
+            
+            print(f"✅ Account deleted successfully for: {user_email}")
+            return jsonify({'success': True, 'message': 'Account deleted successfully'}), 200
+        else:
+            return jsonify({'success': False, 'error': 'User not found'}), 404
+            
+    except Exception as e:
+        db.session.rollback()
+        print(f"❌ Error deleting account: {str(e)}")
+        return jsonify({'success': False, 'error': 'Failed to delete account'}), 500

@@ -22,21 +22,32 @@
             --bg-light: #f8f9ff;
         }
 
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --white: #1a1a1a;
+            --light-gray: #121212;
+            --border-gray: #333;
+            --text-dark: #e0e0e0;
+            --bg-light: #2a2a2a;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--light-gray);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         /* Navigation */
         .navbar {
-            background: white;
+            background: var(--white);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: sticky;
             top: 0;
             z-index: 100;
+            transition: background 0.3s ease;
         }
 
         .nav-container {
@@ -54,13 +65,12 @@
             gap: 12px;
             font-size: 1.5em;
             font-weight: bold;
-            background: var(--alu-orange);
             color: var(--alu-orange);
+            text-decoration: none;
         }
 
         .nav-brand i {
             color: var(--alu-orange);
-            -webkit-text-fill-color: var(--alu-orange);
         }
 
         .nav-logo {
@@ -90,12 +100,12 @@
         }
 
         .user-link {
-            color: var(--alu-orange);
+            color: var(--alu-orange) !important;
         }
 
         .btn-logout {
             background: var(--alu-orange);
-            color: white;
+            color: white !important;
             padding: 8px 20px;
             border-radius: 20px;
             transition: all 0.3s ease;
@@ -144,11 +154,12 @@
         }
 
         .profile-card {
-            background: white;
+            background: var(--white);
             padding: 40px;
             border-radius: 16px;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
             animation: slideInUp 0.6s ease-out;
+            transition: background 0.3s ease;
         }
 
         @keyframes slideInUp {
@@ -223,7 +234,7 @@
         }
 
         .preference-item:hover {
-            background: #fff;
+            background: var(--white);
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
 
@@ -243,17 +254,72 @@
             accent-color: var(--alu-orange);
         }
 
+        /* Toggle Switch for Dark Mode */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+            margin-left: auto;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--alu-orange);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .dark-mode-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
         .search-history-list {
             max-height: 300px;
             overflow-y: auto;
             background: var(--bg-light);
             padding: 20px;
             border-radius: 10px;
+            transition: background 0.3s ease;
         }
 
         .history-item {
             padding: 15px;
-            background: white;
+            background: var(--white);
             margin-bottom: 12px;
             border-radius: 8px;
             border-left: 3px solid var(--alu-orange);
@@ -373,6 +439,94 @@
             font-size: 1.05em;
         }
 
+        /* Modal for Delete Confirmation */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.4s ease;
+            transition: background 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: #f44336;
+        }
+
+        .modal-header i {
+            font-size: 2em;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .modal-body {
+            margin-bottom: 25px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .modal-body ul {
+            margin: 15px 0;
+            padding-left: 20px;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+
+        .close-modal:hover {
+            color: #f44336;
+        }
+
         /* Footer */
         .footer {
             background-color: #2c3e50;
@@ -430,6 +584,11 @@
             .contact-links {
                 grid-template-columns: 1fr;
             }
+
+            .modal-content {
+                margin: 20% auto;
+                width: 95%;
+            }
         }
 
         @media (max-width: 480px) {
@@ -451,10 +610,10 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-brand">
+            <a href="{{ url_for('dashboard') }}" class="nav-brand">
                 <i class="fas fa-plane-departure"></i>
-                <a href="{{ url_for('dashboard') }}" style="color: inherit; text-decoration: none;">FlightHub</a>
-            </div>
+                FlightHub
+            </a>
             <div class="nav-links">
                 <a href="{{ url_for('dashboard') }}"><i class="fas fa-th-large"></i> Dashboard</a>
                 <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a>
@@ -509,17 +668,19 @@
             <div class="profile-card">
                 <h2><i class="fas fa-cog"></i> Preferences</h2>
                 <div class="preference-item">
-                    <label>
-                        <input type="checkbox" id="notifications" checked>
-                        <i class="fas fa-bell"></i>
-                        <span>Enable Notifications</span>
+                    <label class="dark-mode-toggle">
+                        <span><i class="fas fa-moon"></i> Dark Mode</span>
+                        <label class="switch">
+                            <input type="checkbox" id="dark-mode" onchange="toggleDarkMode()">
+                            <span class="slider"></span>
+                        </label>
                     </label>
                 </div>
                 <div class="preference-item">
                     <label>
-                        <input type="checkbox" id="dark-mode">
-                        <i class="fas fa-moon"></i>
-                        <span>Dark Mode</span>
+                        <input type="checkbox" id="notifications" checked>
+                        <i class="fas fa-bell"></i>
+                        <span>Enable Notifications</span>
                     </label>
                 </div>
                 <button class="btn btn-primary" onclick="savePreferences()">
@@ -545,7 +706,7 @@
                     <button class="btn btn-warning" onclick="changePassword()">
                         <i class="fas fa-lock"></i> Change Password
                     </button>
-                    <button class="btn btn-danger" onclick="deleteAccount()">
+                    <button class="btn btn-danger" onclick="showDeleteModal()">
                         <i class="fas fa-user-times"></i> Delete Account
                     </button>
                 </div>
@@ -573,6 +734,35 @@
         </section>
     </div>
 
+    <!-- Delete Account Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+            <div class="modal-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Delete Account</h3>
+            </div>
+            <div class="modal-body">
+                <p><strong>Are you absolutely sure you want to delete your account?</strong></p>
+                <p>This action cannot be undone. All your data, including:</p>
+                <ul>
+                    <li>Account information</li>
+                    <li>Search history</li>
+                    <li>Saved preferences</li>
+                </ul>
+                <p>Will be permanently deleted.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+                <button class="btn btn-danger" onclick="confirmDeleteAccount()">
+                    <i class="fas fa-trash-alt"></i> Yes, Delete My Account
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -588,7 +778,67 @@
     </footer>
 
     <script>
-        // Load search history
+        // ========== DARK MODE ==========
+        function toggleDarkMode() {
+            const isDark = document.getElementById('dark-mode').checked;
+            if (isDark) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                const checkbox = document.getElementById('dark-mode');
+                if (checkbox) checkbox.checked = true;
+            }
+        }
+
+        // ========== DELETE ACCOUNT ==========
+        function showDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        async function confirmDeleteAccount() {
+            try {
+                const response = await fetch('{{ url_for("auth.delete_account") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    alert('✅ Your account has been deleted successfully.');
+                    window.location.href = '{{ url_for("auth.login") }}';
+                } else {
+                    const data = await response.json();
+                    alert('❌ ' + (data.error || 'Failed to delete account. Please try again.'));
+                }
+            } catch (error) {
+                console.error('Error deleting account:', error);
+                alert('❌ Failed to delete account. Please try again.');
+            }
+            closeDeleteModal();
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('deleteModal');
+            if (event.target == modal) {
+                closeDeleteModal();
+            }
+        }
+
+        // ========== SEARCH HISTORY ==========
         async function loadSearchHistory() {
             try {
                 const response = await fetch('/api/history');
@@ -603,7 +853,6 @@
 
                 let html = '<div class="history-items">';
                 history.slice(0, 10).forEach((item, index) => {
-                    // Escape quotes and special characters for onclick handler
                     const safeQuery = (item.search_query || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                     html += `
                         <div class="history-item" onclick="handleHistoryClick(${index})" style="cursor: pointer;" data-search-type="${item.search_type}" data-search-query="${safeQuery}">
@@ -623,7 +872,6 @@
             }
         }
 
-        // Clear history
         async function clearHistory() {
             if (confirm('Are you sure you want to clear your search history?')) {
                 try {
@@ -636,30 +884,6 @@
             }
         }
 
-        // Save preferences
-        function savePreferences() {
-            const notifications = document.getElementById('notifications').checked;
-            const darkMode = document.getElementById('dark-mode').checked;
-            
-            // Here you would typically save to backend
-            console.log('Saving preferences:', { notifications, darkMode });
-            
-            alert('✅ Preferences saved successfully!');
-        }
-
-        // Change password
-        function changePassword() {
-            alert('🔒 Change password feature coming soon!');
-        }
-
-        // Delete account
-        function deleteAccount() {
-            if (confirm('⚠️ Are you sure you want to delete your account? This action cannot be undone!')) {
-                alert('Account deletion feature coming soon');
-            }
-        }
-
-        // Handle history item click
         function handleHistoryClick(index) {
             const historyItems = document.querySelectorAll('.history-item');
             if (historyItems[index]) {
@@ -667,7 +891,6 @@
                 const searchType = item.getAttribute('data-search-type');
                 const searchQuery = item.getAttribute('data-search-query');
                 
-                // Navigate to appropriate page based on search type
                 if (searchType === 'flight') {
                     window.location.href = '/flights?query=' + encodeURIComponent(searchQuery);
                 } else if (searchType === 'airport') {
@@ -675,14 +898,27 @@
                 } else if (searchType === 'airline') {
                     window.location.href = '/airlines?query=' + encodeURIComponent(searchQuery);
                 } else {
-                    // Default to dashboard
                     window.location.href = '/dashboard';
                 }
             }
         }
 
-        // Load history on page load
-        document.addEventListener('DOMContentLoaded', loadSearchHistory);
+        // ========== OTHER FUNCTIONS ==========
+        function savePreferences() {
+            const notifications = document.getElementById('notifications').checked;
+            localStorage.setItem('notifications', notifications);
+            alert('✅ Preferences saved successfully!');
+        }
+
+        function changePassword() {
+            alert('🔒 Change password feature coming soon!');
+        }
+
+        // ========== INITIALIZE ON PAGE LOAD ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            loadSearchHistory();
+        });
     </script>
 </body>
 </html>

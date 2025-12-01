@@ -6,6 +6,7 @@
     <title>Dashboard - FlightHub</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <style>
         /* ALU Color Theme - Consistent with About Page */
         :root {
@@ -14,10 +15,23 @@
             --alu-primary-shadow: rgba(255, 107, 53, 0.4);
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+        }
+
         body {
             background: #f5f7fa;
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Navbar - Clean and Simple */
@@ -98,25 +112,33 @@
             color: var(--alu-primary);
         }
 
-        /* Header - Solid ALU Orange */
+        /* Header - Compact ALU Orange */
         .header {
-            background: var(--alu-primary);
-            color: white;
-            padding: 60px 0;
+            background: #f5f7fa;
+            padding: 40px 0;
             text-align: center;
             margin-bottom: 40px;
         }
 
+        .header-content {
+            display: inline-block;
+            color: white;
+            padding: 30px 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
         .header h1 {
-            color: white !important;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            color: #FF6B35 !important;
+            font-size: 2.2em;
+            margin-bottom: 8px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
         }
 
         .header p {
-            color: white !important;
-            font-size: 1.2em;
+            color: #1a1a1a !important;
+            font-size: 1.1em;
+            margin: 0;
         }
 
         /* Sections */
@@ -133,7 +155,8 @@
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px 40px;
+            padding: 0 20px 60px;
+            flex: 1;
         }
 
         .feature-grid {
@@ -186,7 +209,7 @@
         /* Stats */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmin(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 25px;
             margin-bottom: 50px;
         }
@@ -321,18 +344,21 @@
             border-left: 4px solid var(--alu-primary);
         }
 
-        /* Footer - Matching About Page */
+        /* Footer - Exactly matching About Page - Only visible at bottom */
         .footer {
-            background: #2c3e50;
+            background: #333;
             color: white;
             text-align: center;
-            padding: 30px 0;
-            margin-top: 50px;
+            padding: 30px 20px;
+            margin-top: auto;
+            position: relative;
+            flex-shrink: 0;
         }
 
         .footer p {
-            margin: 10px 0;
+            margin: 8px 0;
             color: white;
+            font-size: 0.9em;
         }
 
         .footer a {
@@ -353,7 +379,7 @@
     </style>
 </head>
 <body>
-    <!-- Navigation Bar - Clean, No Feature Links -->
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="{{ url_for('dashboard') }}" class="nav-brand">
@@ -377,13 +403,30 @@
         <div class="container">
             <div class="header-content">
                 <h1>Welcome, {{ user.username }}!</h1>
-                <p>Choose what you'd like to explore</p>
+                <p>Your Aviation Intelligence Hub</p>
             </div>
         </div>
     </header>
 
     <!-- Main Container -->
     <div class="container">
+        <!-- Welcome Message Section -->
+        <section class="info-section" style="margin-bottom: 50px;">
+            <h2><i class="fas fa-info-circle"></i> Getting Started with FlightHub</h2>
+            <div class="info-card">
+                <p style="font-size: 1.05em; line-height: 1.8; color: #555; margin-bottom: 15px;">
+                    <strong>Welcome to FlightHub!</strong> Your comprehensive aviation intelligence platform. Track real-time flights, 
+                    monitor live aircraft positions worldwide, check airport weather conditions, and explore our extensive database 
+                    of airports and airlines.
+                </p>
+                <p style="font-size: 1em; line-height: 1.8; color: #666;">
+                    <i class="fas fa-lightbulb" style="color: var(--alu-primary); margin-right: 8px;"></i>
+                    <strong>Quick Tip:</strong> Use the feature cards below to access different tools. Your search history is 
+                    automatically saved for quick reference. Data is cached intelligently to provide faster responses and reduce 
+                    API calls.
+                </p>
+            </div>
+        </section>
         <!-- Feature Grid -->
         <section id="features" class="features-section">
             <h2><i class="fas fa-star"></i> Core Features</h2>
@@ -502,9 +545,59 @@
             <h2><i class="fas fa-database"></i> Cache & Performance</h2>
             <div class="info-card">
                 <div id="cache-info">Loading cache information...</div>
+                <p style="margin-top: 15px; color: #666; font-size: 0.95em;">
+                    <i class="fas fa-info-circle" style="color: var(--alu-primary);"></i>
+                    FlightHub uses intelligent caching to store frequently accessed data. This reduces API calls 
+                    and provides faster response times for repeated searches.
+                </p>
                 <button class="btn-secondary" onclick="clearCache()" style="margin-top: 15px;">
                     <i class="fas fa-trash-alt"></i> Clear Cache
                 </button>
+            </div>
+        </section>
+
+        <!-- Platform Features Info -->
+        <section class="info-section" style="margin-top: 50px;">
+            <h2><i class="fas fa-rocket"></i> What You Can Do</h2>
+            <div class="info-card">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                    <div style="padding: 15px;">
+                        <h3 style="color: var(--alu-primary); font-size: 1.2em; margin-bottom: 10px;">
+                            <i class="fas fa-plane-departure"></i> Flight Tracking
+                        </h3>
+                        <p style="color: #666; line-height: 1.6;">
+                            Search for any flight by number, route, or airline. Get real-time status updates, 
+                            departure/arrival times, and gate information.
+                        </p>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="color: var(--alu-primary); font-size: 1.2em; margin-bottom: 10px;">
+                            <i class="fas fa-map-marked-alt"></i> Live Aircraft Map
+                        </h3>
+                        <p style="color: #666; line-height: 1.6;">
+                            View real-time positions of aircraft worldwide. See flight paths, altitudes, speeds, 
+                            and detailed aircraft information on an interactive map.
+                        </p>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="color: var(--alu-primary); font-size: 1.2em; margin-bottom: 10px;">
+                            <i class="fas fa-cloud-sun"></i> Weather Data
+                        </h3>
+                        <p style="color: #666; line-height: 1.6;">
+                            Check current weather conditions at any airport globally. Temperature, wind speed, 
+                            visibility, and weather descriptions updated in real-time.
+                        </p>
+                    </div>
+                    <div style="padding: 15px;">
+                        <h3 style="color: var(--alu-primary); font-size: 1.2em; margin-bottom: 10px;">
+                            <i class="fas fa-building"></i> Airport Directory
+                        </h3>
+                        <p style="color: #666; line-height: 1.6;">
+                            Browse 6,000+ airports with detailed information including ICAO/IATA codes, 
+                            location, timezone, and operational details.
+                        </p>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
@@ -525,21 +618,12 @@
 
     <!-- Footer - Matching About Page -->
     <footer class="footer">
-        <div class="container">
-            <p><i class="fas fa-plane-departure"></i> FlightHub - Aviation Intelligence Platform</p>
-            <p>
-                Powered by 
-                <a href="https://aviationstack.com" target="_blank">AviationStack</a>, 
-                <a href="https://openweathermap.org" target="_blank">OpenWeatherMap</a>, 
-                & <a href="https://opensky-network.org" target="_blank">OpenSky Network</a>
-            </p>
-            <p>&copy; 2025 FlightHub. All rights reserved.</p>
-            <p>
-                <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a> |
-                <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a> |
-                <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
-            </p>
-        </div>
+        <p>&copy; 2024 FlightHub. All rights reserved.</p>
+        <p>
+            <a href="{{ url_for('about') }}"><i class="fas fa-info-circle"></i> About</a> |
+            <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a> |
+            <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+        </p>
     </footer>
 
     <script>

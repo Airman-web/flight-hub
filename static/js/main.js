@@ -631,3 +631,454 @@ document.addEventListener('DOMContentLoaded', function() {
         setInterval(() => loadLiveAircraft(), 10000); // refresh every 10s
     }
 });
+
+// Main.js - Dark Mode for All Pages
+(function() {
+    'use strict';
+    
+    // Create and inject dark mode styles
+    const darkModeCSS = `
+        /* Dark Mode Global Variables - Matching Profile.html */
+        [data-theme="dark"] {
+            --alu-primary: #FF6B35 !important;
+            --alu-secondary: #5B2C6F !important;
+            --alu-primary-shadow: rgba(255, 107, 53, 0.4) !important;
+            --white: #1a1a1a !important;
+            --light-gray: #121212 !important;
+            --border-gray: #333 !important;
+            --text-dark: #e0e0e0 !important;
+            --bg-light: #2a2a2a !important;
+        }
+        
+        /* Body & Background */
+        [data-theme="dark"] body {
+            background: #121212 !important;
+            color: #FF6B35 !important;
+        }
+        
+        /* Navigation */
+        [data-theme="dark"] .navbar {
+            background: #1a1a1a !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+        }
+        
+        [data-theme="dark"] .nav-brand {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .nav-links a {
+            color: #e0e0e0 !important;
+        }
+        
+        [data-theme="dark"] .nav-links a:hover {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .user-link {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .btn-logout {
+            background: #FF6B35 !important;
+        }
+        
+        /* Header */
+        [data-theme="dark"] .header {
+            background: #121212 !important;
+        }
+        
+        [data-theme="dark"] .header-content {
+            background: #2a2a2a !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+        }
+        
+        [data-theme="dark"] .header h1,
+        [data-theme="dark"] .header p {
+            color: #FF6B35 !important;
+        }
+        
+        /* Cards & Containers */
+        [data-theme="dark"] .feature-card,
+        [data-theme="dark"] .stat-card,
+        [data-theme="dark"] .action-btn,
+        [data-theme="dark"] .info-card,
+        [data-theme="dark"] .profile-card,
+        [data-theme="dark"] .flight-card,
+        [data-theme="dark"] .search-section,
+        [data-theme="dark"] .results-container,
+        [data-theme="dark"] .auth-card,
+        [data-theme="dark"] .modal-content,
+        [data-theme="dark"] .history-item {
+            background: #1a1a1a !important;
+            color: #e0e0e0 !important;
+            border-color: #333 !important;
+        }
+        
+        [data-theme="dark"] .feature-card:hover,
+        [data-theme="dark"] .flight-card:hover {
+            background: #2a2a2a !important;
+        }
+        
+        /* Sections */
+        [data-theme="dark"] .stats-section,
+        [data-theme="dark"] .quick-actions,
+        [data-theme="dark"] .info-section {
+            background: #1a1a1a !important;
+        }
+        
+        [data-theme="dark"] .features-section h2 {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .stats-section h2,
+        [data-theme="dark"] .quick-actions h2,
+        [data-theme="dark"] .info-section h2,
+        [data-theme="dark"] .feature-card h3,
+        [data-theme="dark"] .search-section h2 {
+            color: #FF6B35 !important;
+        }
+        
+        /* Text Elements */
+        [data-theme="dark"] .feature-card p,
+        [data-theme="dark"] .stat-label,
+        [data-theme="dark"] .detail-label,
+        [data-theme="dark"] .info-label,
+        [data-theme="dark"] .airport-name,
+        [data-theme="dark"] .subtitle {
+            color: #b0b0b0 !important;
+        }
+        
+        [data-theme="dark"] .airport-code,
+        [data-theme="dark"] .flight-number,
+        [data-theme="dark"] .detail-value,
+        [data-theme="dark"] .info-value,
+        [data-theme="dark"] .stat-number {
+            color: #FF6B35 !important;
+        }
+        
+        /* Icons */
+        [data-theme="dark"] .feature-icon,
+        [data-theme="dark"] .route-arrow {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .feature-card h3,
+        [data-theme="dark"] .profile-card h2,
+        [data-theme="dark"] .profile-card h2 i,
+        [data-theme="dark"] .info-item label,
+        [data-theme="dark"] .info-item label i {
+            color: #FF6B35 !important;
+        }
+        
+        /* Forms & Inputs */
+        [data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]),
+        [data-theme="dark"] select,
+        [data-theme="dark"] textarea {
+            background: #2a2a2a !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+        
+        [data-theme="dark"] input:focus,
+        [data-theme="dark"] select:focus,
+        [data-theme="dark"] textarea:focus {
+            background: #333 !important;
+            border-color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .input-group label,
+        [data-theme="dark"] .control-group label,
+        [data-theme="dark"] .form-group label {
+            color: #FF6B35 !important;
+        }
+        
+        /* Buttons */
+        [data-theme="dark"] .btn-secondary {
+            background: #2a2a2a !important;
+            color: #e0e0e0 !important;
+            border-color: #444 !important;
+        }
+        
+        [data-theme="dark"] .btn-secondary:hover {
+            background: #FF6B35 !important;
+            color: white !important;
+        }
+        
+        [data-theme="dark"] .action-btn {
+            background: #1a1a1a !important;
+            border-color: #444 !important;
+        }
+        
+        [data-theme="dark"] .action-btn:hover {
+            background: #FF6B35 !important;
+            color: white !important;
+        }
+        
+        [data-theme="dark"] .btn-primary {
+            background: #FF6B35 !important;
+        }
+        
+        /* Tabs */
+        [data-theme="dark"] .auth-tabs,
+        [data-theme="dark"] .tabs {
+            border-bottom-color: #333 !important;
+        }
+        
+        [data-theme="dark"] .auth-tab,
+        [data-theme="dark"] .tab-btn {
+            color: #b0b0b0 !important;
+            background: #1a1a1a !important;
+        }
+        
+        [data-theme="dark"] .auth-tab.active,
+        [data-theme="dark"] .tab-btn.active {
+            color: #FF6B35 !important;
+            border-bottom-color: #FF6B35 !important;
+        }
+        
+        /* Stat Cards - Special handling for colored backgrounds */
+        [data-theme="dark"] .stat-card {
+            background: #2a2a2a !important;
+            color: #e0e0e0 !important;
+        }
+        
+        /* Footer */
+        [data-theme="dark"] .footer {
+            background: #0a0a0a !important;
+            color: #e0e0e0 !important;
+        }
+        
+        [data-theme="dark"] .footer p {
+            color: #e0e0e0 !important;
+        }
+        
+        [data-theme="dark"] .footer a {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .footer a:hover {
+            color: #5B2C6F !important;
+        }
+        
+        /* About Page Specific */
+        [data-theme="dark"] .hero,
+        [data-theme="dark"] .mission,
+        [data-theme="dark"] .features,
+        [data-theme="dark"] .how-it-works,
+        [data-theme="dark"] .apis,
+        [data-theme="dark"] .technology,
+        [data-theme="dark"] .contact {
+            background: #121212 !important;
+        }
+        
+        [data-theme="dark"] .hero h1,
+        [data-theme="dark"] .hero p,
+        [data-theme="dark"] .mission h2,
+        [data-theme="dark"] .mission p {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .api-card,
+        [data-theme="dark"] .tech-item,
+        [data-theme="dark"] .contact-item,
+        [data-theme="dark"] .use-case,
+        [data-theme="dark"] .smart-card {
+            background: #1a1a1a !important;
+        }
+        
+        [data-theme="dark"] .tech-item {
+            background: #1a1a1a !important;
+            border-left-color: #FF6B35 !important;
+        }
+        
+        /* Flight Cards */
+        [data-theme="dark"] .flight-card {
+            border-bottom-color: #333 !important;
+        }
+        
+        [data-theme="dark"] .flight-card:hover {
+            background: #2a2a2a !important;
+        }
+        
+        /* Empty States & Messages */
+        [data-theme="dark"] .empty-state,
+        [data-theme="dark"] .error-message {
+            color: #b0b0b0 !important;
+            background: #1a1a1a !important;
+        }
+        
+        /* Controls */
+        [data-theme="dark"] .controls {
+            background: #1a1a1a !important;
+        }
+        
+        /* Loading Spinner */
+        [data-theme="dark"] .loading {
+            background: rgba(0, 0, 0, 0.95) !important;
+        }
+        
+        /* Alerts */
+        [data-theme="dark"] .alert {
+            background: #2a2a2a !important;
+            color: #e0e0e0 !important;
+        }
+        
+        [data-theme="dark"] .alert-success {
+            background: #1a3a1a !important;
+            border-left-color: #4CAF50 !important;
+        }
+        
+        [data-theme="dark"] .alert-error {
+            background: #3a1a1a !important;
+            border-left-color: #f44336 !important;
+        }
+        
+        /* Info Items */
+        [data-theme="dark"] .info-item,
+        [data-theme="dark"] .preference-item,
+        [data-theme="dark"] .detail-item,
+        [data-theme="dark"] .cache-details {
+            background: #2a2a2a !important;
+        }
+        
+        /* Auth Links */
+        [data-theme="dark"] .auth-links {
+            border-top-color: #333 !important;
+        }
+        
+        [data-theme="dark"] .auth-links a {
+            color: #FF8C61 !important;
+        }
+        
+        [data-theme="dark"] .auth-footer {
+            background: transparent !important;
+            color: #b0b0b0 !important;
+            border-top-color: #333 !important;
+        }
+        
+        [data-theme="dark"] .auth-footer a {
+            color: #FF8C61 !important;
+        }
+        
+        /* Password Toggle */
+        [data-theme="dark"] .password-toggle {
+            background: #2a2a2a !important;
+            border-color: #444 !important;
+            color: #e0e0e0 !important;
+        }
+        
+        [data-theme="dark"] .password-toggle:hover {
+            background: #333 !important;
+            border-color: #FF6B35 !important;
+        }
+        
+        /* Step Numbers */
+        [data-theme="dark"] .step-number {
+            background: #FF6B35 !important;
+        }
+        
+        /* Divider */
+        [data-theme="dark"] .divider {
+            color: #666 !important;
+        }
+        
+        [data-theme="dark"] .divider::before,
+        [data-theme="dark"] .divider::after {
+            background: #333 !important;
+        }
+        
+        /* Contact Items */
+        [data-theme="dark"] .contact-item a,
+        [data-theme="dark"] .api-link {
+            color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .contact-link {
+            background: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .info-item {
+            border-left-color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .history-item {
+            border-left-color: #FF6B35 !important;
+        }
+        
+        [data-theme="dark"] .history-item strong {
+            color: #5B2C6F !important;
+        }
+        
+        /* Additional Override for Stubborn Elements */
+        [data-theme="dark"] * {
+            border-color: #333 !important;
+        }
+        
+        [data-theme="dark"] h1, 
+        [data-theme="dark"] h2, 
+        [data-theme="dark"] h3, 
+        [data-theme="dark"] h4, 
+        [data-theme="dark"] h5, 
+        [data-theme="dark"] h6 {
+            color: #FF6B35!important;
+        }
+    `;
+    
+    // Create style element
+    const styleElement = document.createElement('style');
+    styleElement.id = 'dark-mode-styles';
+    styleElement.textContent = darkModeCSS;
+    document.head.appendChild(styleElement);
+    
+    // Load saved theme preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    
+    // Listen for theme changes from other tabs/windows
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'theme') {
+            if (e.newValue === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+            }
+        }
+    });
+})();
+
+// Toggle dark mode function (can be called from any page)
+function toggleDarkMode() {
+    const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+    
+    if (isDarkMode) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+    
+    // Trigger storage event for other tabs
+    window.dispatchEvent(new Event('storage'));
+    
+    // Update toggle button if it exists
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        darkModeToggle.checked = !isDarkMode;
+    }
+}
+
+// Initialize dark mode toggle on profile page if it exists
+document.addEventListener('DOMContentLoaded', function() {
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    if (darkModeToggle) {
+        // Set initial state
+        const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
+        darkModeToggle.checked = isDarkMode;
+        
+        // Add event listener
+        darkModeToggle.addEventListener('change', toggleDarkMode);
+    }
+});
