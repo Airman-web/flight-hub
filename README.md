@@ -4,9 +4,9 @@ Show Image
 Show Image
 Show Image
 FlightHub is a comprehensive aviation intelligence platform that provides real-time flight tracking, live aircraft positions, airport weather data, and an extensive database of airports and airlines worldwide.
-🌐 Live Demo: https://atigbi.tech
-
-📑 Table of Contents
+ Live Demo: https://atigbi.tech
+ Link to Demo video  https://youtu.be/xlAAfONgUkw
+ Table of Contents
 
 Features
 Technology Stack
@@ -24,7 +24,7 @@ Contributing
 License
 
 
-✨ Features
+ Features
 Core Features
 
 Real-Time Flight Tracking: Search and track flights worldwide with detailed status information
@@ -43,7 +43,7 @@ Responsive Design: Mobile-friendly interface that works on all devices
 Smart Caching: Intelligent data caching to reduce API calls and improve performance
 
 
-🛠 Technology Stack
+ Technology Stack
 Backend
 
 Python 3.8+: Core programming language
@@ -76,7 +76,7 @@ OpenWeatherMap API: Airport weather data
 OpenSky Network API: Live aircraft tracking data
 
 
-🏗 System Architecture
+ System Architecture
                                     ┌─────────────────┐
                                     │   CloudFlare    │
                                     │   (Optional)    │
